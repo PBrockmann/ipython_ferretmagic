@@ -177,7 +177,7 @@ class ferretMagics(Magics):
         )
     @argument(
         '-s', '--size',
-        help='Pixel size of plots, "width x height". Default is "-s 600x400".'
+        help='Pixel size of plots, "width x height". Default is "-s 600x500".'
         )
     @argument(
         '-a', '--antialias', default=False, action='store_true',
