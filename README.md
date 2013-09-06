@@ -77,7 +77,7 @@ Explore notebook for examples.
 
 ## Known issues and limitations
 
-* pdf are not embedded in the notebook
 * Only one plot can be rendered per cell
-* Limitations are the ones exposed from pyferret (the qualifier /pattern is not usable for example) for example. Read http://ferret.pmel.noaa.gov/Ferret/documentation/pyferret/known-issues
+* Note that the pdf file produced by -p,--pdf option is not embedded in the notebook
+* Limitations are the ones exposed from pyferret, the qualifier /pattern is not usable for example. Read http://ferret.pmel.noaa.gov/Ferret/documentation/pyferret/known-issues
 
