@@ -33,8 +33,7 @@ Usage
 
 #-----------------------------------------------------------------------------
 #  Patrick.Brockmann@lsce.ipsl.fr
-#
-#  Release: 0.6 - 2013/08/28
+#  Started 2013/08/28 then put on github.com 2013/09/06
 #
 #-----------------------------------------------------------------------------
 
@@ -89,7 +88,7 @@ class ferretMagics(Magics):
     @line_magic
     def ferret_run(self, line):
         '''
-        Line-level magic to run a command in ferret.
+        Line-level magic to run a command in ferret. No stdout and no png or pdf output. Only error
 
             In [19]: %ferret_run 'let a = 12'
 
@@ -97,7 +96,15 @@ class ferretMagics(Magics):
 	args = parse_argstring(self.ferret_run, line)
 
 	code = unicode_to_str(" ".join(args.string))
-	pyferret.run(self.shell.ev(code))
+        FERR_OK = 3
+	(errval, errmsg) = pyferret.run(self.shell.ev(code))
+        if errval != FERR_OK :
+            	self._publish_display_data('ferretMagic.ferret', {'text/html': 
+			'<pre style="background-color:#F79F81; border-radius: 4px 4px 4px 4px; font-size: smaller">' +
+            		'yes? %s\n' % code +
+			'error val = %s\nerror msg = %s' % (errval, errmsg) +
+			'</pre>' 
+			})
 
 #----------------------------------------------------
     @magic_arguments()
@@ -165,7 +172,7 @@ class ferretMagics(Magics):
 	pyferret.putdata(self.shell.user_ns[ferretvariable], axis_pos=axis_pos_variable)
         self._publish_display_data('ferretMagic.ferret', {'text/html': 
 		'<pre style="background-color:#F2F5A9; border-radius: 4px 4px 4px 4px; font-size: smaller">' +
-		'Message: ' + ferretvariable + ' is now available in ferret.'
+		'Message: ' + ferretvariable + ' is now available in ferret as ' + self.shell.user_ns[ferretvariable]['name'] + 
 		'</pre>' 
 	})
 
