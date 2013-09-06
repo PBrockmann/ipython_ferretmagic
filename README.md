@@ -1,12 +1,13 @@
 ipython-ferretmagic
 ===================
 
-ipython notebook extension for ferret
+ipython notebook extension for ferret (a great software for Data Visualisation and Analysis from NOAA/PMEL)
 
 ## Installation
 
-Install pyferret from instruction from http://ferret.pmel.noaa.gov/Ferret/documentation/pyferret.
-Once you can import pyferret module then install the ipython notebook extension 
+Install pyferret following instructions from http://ferret.pmel.noaa.gov/Ferret/documentation/pyferret.
+
+Once you can import the pyferret module in python then install the ipython notebook extension.
 
 In IPython, install ferretmagic:
 
