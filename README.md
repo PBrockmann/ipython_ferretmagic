@@ -1,7 +1,7 @@
 ipython-ferretmagic
 ===================
 
-ipython notebook extension for ferret (a great software for Data Visualisation and Analysis from NOAA/PMEL)
+IPython notebook extension for ferret (a great software for Data Visualisation and Analysis from NOAA/PMEL)
 
 ## Installation
 
@@ -15,7 +15,7 @@ In IPython, install ferretmagic:
     
 ## Usage
 
-In Ipython, load the magics:
+In IPython, load the magics:
 
     In [2]: %reload_ext ferretmagic
    
