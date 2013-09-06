@@ -124,7 +124,9 @@ class ferretMagics(Magics):
             In [18]: %%ferret
                ....: use levitus_climatology
             In [19]: %ferret_getdata tempdict = temp
-            In [20]: tempdict 
+	       ....: Message: tempdict is now available in python as a dictionary containing the variable's metadata and data array.
+            In [20]: print tempdict.keys()
+	       ....: ['axis_coords', 'axis_types', 'data_unit', 'axis_units', 'title', 'axis_names', 'missing_value', 'data']
 
         '''
 
@@ -156,10 +158,16 @@ class ferretMagics(Magics):
         '''
         Line-level magic to put data to ferret.
 
-            In [18]: a=12
-            In [19]: %ferret_putdata a
-            In [20]: %%ferret
-               ....: list a
+            In [31]: import numpy as np
+               ....: b = {}
+               ....: b['name']='myvar'
+               ....: b['name']='myvar'
+               ....: x=np.linspace(-np.pi*4, np.pi*4, 500)
+               ....: b['data']=np.sin(x)/x
+               ....: b.keys()
+            Out[31]: ['data', 'name']
+	    In [32]: %ferret_putdata --axis_pos (1,0,2,3,4,5) b
+	       ....: Message: b is now available in ferret as myvar
 
         '''
 	args = parse_argstring(self.ferret_putdata, line)

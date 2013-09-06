@@ -47,8 +47,38 @@ In [5]: %%ferret -a -s 400,300 -pdf myfig.pdf
 
 ### Passing variables between Python and ferret 
 
-* Variables may be pushed from IPython into ferret with `%ferret_putdata`:
-* Variables may be pulled from ferret into IPython with `%ferret_getdata`:
+* Variables can be pushed from IPython into ferret with `%ferret_putdata`:
+
+```
+In [18]: %%ferret
+   ....: use levitus_climatology
+In [19]: %ferret_getdata tempdict = temp
+   ....: Message: tempdict is now available in python as a dictionary containing the variable's metadata and data array.
+In [20]: print tempdict.keys()
+   ....: ['axis_coords', 'axis_types', 'data_unit', 'axis_units', 'title', 'axis_names', 'missing_value', 'data']
+```
+
+* Variables can be pulled from ferret into IPython with `%ferret_getdata`:
+
+```
+In [9]: %ferret_putdata sstdict
+```
+sstdict is now available in python as a dictionary containing the variable's metadata and data array.
+
+* Variables can be pulled from ferret into IPython with `%ferret_getdata`:
+
+```
+In [31]: import numpy as np
+   ....: b = {}
+   ....: b['name']='myvar'
+   ....: b['name']='myvar'
+   ....: x=np.linspace(-np.pi*4, np.pi*4, 500)
+   ....: b['data']=np.sin(x)/x
+   ....: b.keys()
+Out[31]: ['data', 'name']
+In [32]: %ferret_putdata --axis_pos (1,0,2,3,4,5) b
+   ....: Message: b is now available in ferret as myvar
+```
 
 Explore notebook for examples.
 
