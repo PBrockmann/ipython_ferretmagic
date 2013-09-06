@@ -61,13 +61,6 @@ In [20]: print tempdict.keys()
 * Variables can be pulled from ferret into IPython with `%ferret_getdata`:
 
 ```
-In [9]: %ferret_putdata sstdict
-```
-sstdict is now available in python as a dictionary containing the variable's metadata and data array.
-
-* Variables can be pulled from ferret into IPython with `%ferret_getdata`:
-
-```
 In [31]: import numpy as np
    ....: b = {}
    ....: b['name']='myvar'
