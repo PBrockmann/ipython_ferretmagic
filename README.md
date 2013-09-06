@@ -36,17 +36,19 @@ In [4]: %%ferret
    ...: shade temp[k=1]			! comments
 ```
 
-Control size of plot with --size, -s option.
-Create a local pdf at the same time with --pdf, -p option.
-Improve your graphic with antialiasing with --antialias, -a option.
+* Control size of plot with --size, -s option.
+* Create a local pdf at the same time with --pdf, -p option.
+* Improve your graphic with antialiasing with --antialias, -a option.
 
+```
 In [5]: %%ferret -a -s 400,300 -pdf myfig.pdf
    ...: shade temp[k=1]			
+```
 
 ### Passing variables between Python and ferret 
 
-Variables may be pushed from IPython into ferret with `%ferret_putdata`:
-Variables may be pulled from ferret into IPython with `%ferret_getdata`:
+* Variables may be pushed from IPython into ferret with `%ferret_putdata`:
+* Variables may be pulled from ferret into IPython with `%ferret_getdata`:
 
 Explore notebook for examples.
 
@@ -54,5 +56,5 @@ Explore notebook for examples.
 
 * pdf are not embedded in the notebook
 * Only one plot can be rendered per cell
-* Limitations are the ones exposed from pyferret (the qualifier /pattern is not usable for example) for example . Read http://ferret.pmel.noaa.gov/Ferret/documentation/pyferret/known-issues
+* Limitations are the ones exposed from pyferret (the qualifier /pattern is not usable for example) for example. Read http://ferret.pmel.noaa.gov/Ferret/documentation/pyferret/known-issues
 
