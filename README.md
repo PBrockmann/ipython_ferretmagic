@@ -24,7 +24,8 @@ In IPython, load the magics:
 The `%ferret_run` magic enables one-line execution of ferret command in the IPython interpreter or notebook:
 
 ```
-In [3]: %ferret_run 'let a=12'
+    In [3]: for i in [100,500,1000]:
+      ....: 	%ferret_run -a -s 400,400 'plot sin(i[i=1:%(i)s]*0.1)' % locals()
 ```
 
 ### Cell magics
@@ -33,8 +34,8 @@ Multi-line input can be entered with the `%%ferret` cell magic:
 
 ```
 In [4]: %%ferret
-   ...: use levitus_climatology
-   ...: shade temp[k=1]			! comments
+  ....: use levitus_climatology
+  ....: shade temp[k=1]			! comments
 ```
 
 * Control size of plot with --size, -s option.
@@ -43,7 +44,7 @@ In [4]: %%ferret
 
 ```
 In [5]: %%ferret -a -s 400,300 -pdf myfig.pdf
-   ...: shade temp[k=1]			
+  ....: shade temp[k=1]			
 ```
 
 ### Passing variables between Python and ferret 
@@ -78,7 +79,6 @@ Explore notebook for examples.
 
 ## Known issues and limitations
 
-* Only one plot can be rendered per cell
 * Note that the pdf file produced by -p,--pdf option is not embedded in the notebook
 * Limitations are the ones exposed from pyferret, the qualifier /pattern is not usable for example. Read http://ferret.pmel.noaa.gov/Ferret/documentation/pyferret/known-issues
 
