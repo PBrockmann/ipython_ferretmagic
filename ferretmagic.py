@@ -121,6 +121,8 @@ class ferretMagics(Magics):
         (errval, errmsg) = pyferret.run('set window/aspect=`%(plot_height)s/%(plot_width)s`/size=`(0.7*%(plot_width)s*%(plot_height)s)/(%(FERRET_PLOT_WIDTH)s*%(FERRET_PLOT_HEIGHT)s)` 1' % locals())
 	# SDOUT handling
         (errval, errmsg) = pyferret.run('set redirect/clobber/file="%(plot_dir)s/__ipy_ferret_tmp.txt" stdout' % locals())
+	# Cancel mode verify
+        (errval, errmsg) = pyferret.run('cancel mode verify')
 	# Set graphics with or without antialias
 	if args.antialias:
         	(errval, errmsg) = pyferret.run('set graphics/antialias')
