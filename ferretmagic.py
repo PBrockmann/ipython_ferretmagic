@@ -76,30 +76,19 @@ class ferretMagics(Magics):
         except ExceptionPexpect:
             raise ferretMagicError('pyferret cannot be started')
 
-        # Allow publish_display_data to be overridden for
-        # testing purposes.
-        self._publish_display_data = publish_display_data
-
 #----------------------------------------------------
     def ferret_run_code(self, args, code):
 
 	# ferret constants
 	FERRET_OK = 3
-	FERRET_PLOT_WIDTH = 1024
-	FERRET_PLOT_HEIGHT = 884
-	# FERRET_PLOT_WIDTH, FERRET_PLOT_HEIGHT are set from following code
-	# import pyferret
-	# pyferret.start(unmapped=True)
-	# pyferret.run('set mode metafile:"t1.png"')
-	# pyferret.run('plot i[i=1:100]')
-	# pyferret.run('cancel mode metafile')
-	# os.system('identify t1.png')
 
 	# Temporary directory
         plot_dir = tempfile.mkdtemp().replace('\\', '/')
+	# Named temporary file (locally stored)
+	pdf_file = tempfile.NamedTemporaryFile(prefix='_ipy_ferret_fig_', dir='.', suffix='.pdf', delete=False)
+	pdf_filename = os.path.basename(pdf_file.name)
 
-	# Memory setting
-	# With Ferret v6.8 and higher you are allocating double-precision "words"
+	# Memory setting in double-precision "words"
         if args.memory:
         	(errval, errmsg) = pyferret.run('set memory/size=%s' % args.memory)
 	else:
@@ -114,36 +103,39 @@ class ferretMagics(Magics):
             plot_width = 600			# default values
             plot_height = 500
 
+        # Publish
+        key = 'ferretMagic.ferret'
+
 	#-------------------------------
-	# Start of ferret script for png output
-	(errval, errmsg) = pyferret.run('set mode metafile:"%(plot_dir)s/__ipy_ferret_fig.png"' % locals())
-	# Set window with correct aspect and size
-        (errval, errmsg) = pyferret.run('set window/aspect=`%(plot_height)s/%(plot_width)s`/size=`(0.7*%(plot_width)s*%(plot_height)s)/(%(FERRET_PLOT_WIDTH)s*%(FERRET_PLOT_HEIGHT)s)` 1' % locals())
+	# Set window
+        (errval, errmsg) = pyferret.run('set window/xinches=20/thick=`%(plot_width)s/100`/xpixels=%(plot_width)s/ypixels=%(plot_height)s 1' % locals())
 	# SDOUT handling
         (errval, errmsg) = pyferret.run('set redirect/clobber/file="%(plot_dir)s/__ipy_ferret_tmp.txt" stdout' % locals())
 	# Cancel mode verify
         (errval, errmsg) = pyferret.run('cancel mode verify')
 	# Set graphics with or without antialias
 	if args.antialias:
-        	(errval, errmsg) = pyferret.run('set graphics/antialias')
+        	(errval, errmsg) = pyferret.run('set window/antialias')
 	else:
-        	(errval, errmsg) = pyferret.run('set graphics/noantialias')
+        	(errval, errmsg) = pyferret.run('set window/noantialias')
 	# Run code
 	pyferret_error = False
         for input in code:
             input = unicode_to_str(input)
             (errval, errmsg) = pyferret.run(input)
             if errval != FERRET_OK :
-            	self._publish_display_data('ferretMagic.ferret', {'text/html': 
-									'<pre style="background-color:#F79F81; border-radius: 4px 4px 4px 4px; font-size: smaller">' +
-            								'yes? %s\n' % input +
-									'error val = %s\nerror msg = %s' % (errval, errmsg) +
-									'</pre>' 
-								})
+            	publish_display_data(key, {'text/html': 
+			'<pre style="background-color:#F79F81; border-radius: 4px 4px 4px 4px; font-size: smaller">' +
+            		'yes? %s\n' % input +
+			'error val = %s\nerror msg = %s' % (errval, errmsg) +
+			'</pre>' 
+		})
 		pyferret_error = True
 		break
-	# Close output file 
-        (errval, errmsg) = pyferret.run('cancel mode metafile')
+        # Create png file
+        (errval, errmsg) = pyferret.run('frame/file="%(plot_dir)s/__ipy_ferret_fig.png"' % locals())
+        if args.pdf:
+                (errval, errmsg) = pyferret.run('frame/file="%(pdf_filename)s"' % locals())
 	# Close stdout
         (errval, errmsg) = pyferret.run('cancel redirect')
 	# Close window
@@ -151,27 +143,34 @@ class ferretMagics(Magics):
 	#-------------------------------
 
         # Publish
-        key = 'ferretMagic.ferret'
         display_data = []
 
-        # Publish text output
-	try:
-		text_outputs = []
-		text_outputs.append('<pre style="background-color:#ECF6CE; border-radius: 4px 4px 4px 4px; font-size: smaller">')
-        	f = open ("%(plot_dir)s/__ipy_ferret_tmp.txt" % locals(),"r")
-		for line in f:
-			text_outputs.append(line)
-		f.close()
-		text_outputs.append("</pre>")
-		text_output = "".join(text_outputs)
-        	display_data.append((key, {'text/html': text_output}))
-	except:
-		pass
+        # Publish text output if not empty
+	if os.path.getsize("%(plot_dir)s/__ipy_ferret_tmp.txt" % locals()) != 0 : 
+		try:
+			text_outputs = []
+			text_outputs.append('<pre style="background-color:#ECF6CE; border-radius: 4px 4px 4px 4px; font-size: smaller">')
+        		f = open ("%(plot_dir)s/__ipy_ferret_tmp.txt" % locals(),"r")
+			for line in f:
+				text_outputs.append(line)
+			f.close()
+			text_outputs.append("</pre>")
+			text_output = "".join(text_outputs)
+        		display_data.append((key, {'text/html': text_output}))
+		except:
+			pass
 
         # Publish image if present
 	try:
-        	image = open("%(plot_dir)s/__ipy_ferret_fig.png" % locals(), 'rb').read() 
-        	display_data.append((key, {'image/png': image}))
+        	#image = open("%(plot_dir)s/__ipy_ferret_fig.png" % locals(), 'rb').read()
+        	#display_data.append((key, {'image/png': image}))
+
+        	image = open("%(plot_dir)s/__ipy_ferret_fig.png" % locals(), 'rb').read().encode('base64')
+        	display_data.append((key, {'text/html': 
+			#'<img src="data:image/png;base64,%(image)s" width="%(plot_width)s" height="%(plot_height)s" />' % locals() }))
+			#'<div>' + '<img src="data:image/png;base64,%(image)s" width="%(plot_width)s" height="%(plot_height)s" />' % locals() + '</div>' }))
+			'<div class="myoutput">' + '<img src="data:image/png;base64,%(image)s"/>' % locals() + '</div>' }))
+
 	except:
 		pass
 
@@ -211,7 +210,8 @@ class ferretMagics(Magics):
 
 	# Publication
         for source, data in display_data:
-          	self._publish_display_data(source, data)
+          	publish_display_data(source, data)
+
 
 #----------------------------------------------------
     @magic_arguments()
@@ -315,7 +315,7 @@ class ferretMagics(Magics):
 	ferretvariable = code.split('=')[1]
 	exec('%s = pyferret.getdata("%s", %s)' % (pythonvariable, ferretvariable, args.create_mask) )
 	self.shell.push("%s" % pythonvariable)
-        self._publish_display_data('ferretMagic.ferret', {'text/html': 
+        publish_display_data('ferretMagic.ferret', {'text/html': 
 		'<pre style="background-color:#F2F5A9; border-radius: 4px 4px 4px 4px; font-size: smaller">' +
 		'Message: ' + pythonvariable + " is now available in python as a dictionary containing the variable's metadata and data array."
 		'</pre>' 
@@ -356,7 +356,7 @@ class ferretMagics(Magics):
 	else:
 		axis_pos_variable = None
 	pyferret.putdata(self.shell.user_ns[ferretvariable], axis_pos=axis_pos_variable)
-        self._publish_display_data('ferretMagic.ferret', {'text/html': 
+        publish_display_data('ferretMagic.ferret', {'text/html': 
 		'<pre style="background-color:#F2F5A9; border-radius: 4px 4px 4px 4px; font-size: smaller">' +
 		'Message: ' + ferretvariable + ' is now available in ferret as ' + self.shell.user_ns[ferretvariable]['name'] + 
 		'</pre>' 
