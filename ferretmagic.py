@@ -108,7 +108,8 @@ class ferretMagics(Magics):
 
 	#-------------------------------
 	# Set window
-        (errval, errmsg) = pyferret.run('set window/xinches=20/thick=`%(plot_width)s/100`/xpixels=%(plot_width)s/ypixels=%(plot_height)s 1' % locals())
+        #(errval, errmsg) = pyferret.run('set window/xinches=20/thick=`%(plot_width)s/100`/xpixels=%(plot_width)s/ypixels=%(plot_height)s 1' % locals())
+        (errval, errmsg) = pyferret.run('set window/xinches=20/thick=`%(plot_width)s/200`/xpixels=%(plot_width)s/ypixels=%(plot_height)s 1' % locals())
 	# SDOUT handling
         (errval, errmsg) = pyferret.run('set redirect/clobber/file="%(plot_dir)s/__ipy_ferret_tmp.txt" stdout' % locals())
 	# Cancel mode verify
