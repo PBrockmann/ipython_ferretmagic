@@ -37,15 +37,11 @@ Usage
 #
 #-----------------------------------------------------------------------------
 
-import sys
 import os.path
 import tempfile
-from glob import glob
-from shutil import rmtree
-
-import numpy as np
+import math
 import pyferret
-from xml.dom import minidom
+from shutil import rmtree
 
 from IPython.core.displaypub import publish_display_data
 from IPython.core.magic import Magics, magics_class, line_magic, cell_magic, needs_local_scope
@@ -53,14 +49,18 @@ from IPython.core.magic_arguments import argument, magic_arguments, parse_argstr
 from IPython.utils.py3compat import unicode_to_str
 from pexpect import ExceptionPexpect
 
+_PUBLISH_KEY = 'ferretMagic.ferret'
+_DEFAULT_PLOTSIZE = '756.0,612.0'
+_DEFAULT_MEMSIZE = 400.0
+
 #----------------------------------------------------
 class ferretMagicError(Exception):
     pass
 
 @magics_class
 class ferretMagics(Magics):
-    """A set of magics useful for interactive work with ferret via pyferret.
-
+    """
+    A set of magics useful for interactive work with ferret via pyferret.
     """
 #----------------------------------------------------
     def __init__(self, shell):
@@ -68,169 +68,187 @@ class ferretMagics(Magics):
         Parameters
         ----------
         shell : IPython shell
-
         """
         super(ferretMagics, self).__init__(shell)
         try:
-            pyferret.start(journal=False, unmapped=True)
+            pyferret.start(memsize=(_DEFAULT_MEMSIZE/8.0), verify=False, journal=False, unmapped=True, quiet=True)
         except ExceptionPexpect:
             raise ferretMagicError('pyferret cannot be started')
 
 #----------------------------------------------------
     def ferret_run_code(self, args, code):
+        """
+        Parameters
+        ----------
+        args : control arguments for running (py)ferret
+        code : ferret commands to run
+        """
 
-	# ferret constants
-	FERRET_OK = 3
+        # Temporary directory; create under the current directory 
+        # so PDF link files are accessible
+        temp_dir = tempfile.mkdtemp(dir='.', prefix='ipyferret_').replace('\\', '/')
 
-	# Temporary directory
-        plot_dir = tempfile.mkdtemp().replace('\\', '/')
-	# Named temporary file (locally stored)
-	pdf_file = tempfile.NamedTemporaryFile(prefix='_ipy_ferret_fig_', dir='.', suffix='.pdf', delete=False)
-	pdf_filename = os.path.basename(pdf_file.name)
+        # Redirect stdout and stderr to file
+        out_filename = temp_dir + '/output.txt' 
+        (errval, errmsg) = pyferret.run('set redirect /clobber /file="%s" stdout stderr' % out_filename)
 
-	# Memory setting in double-precision "words"
-        if args.memory:
-        	(errval, errmsg) = pyferret.run('set memory/size=%s' % args.memory)
-	else:
-        	(errval, errmsg) = pyferret.run('set memory/size=50')
-
-	# Plot size
-        if args.size:
-            plot_size  = args.size.split(',')
-            plot_width  = int(plot_size[0])
-            plot_height  = int(plot_size[1])
+        # Filename for saving the final plot (if any)
+        if args.plotname:
+            plot_filename = str(args.plotname)
+            if args.pdf:
+                if not plot_filename.endswith('.pdf'):
+                    plot_filename += '.pdf'
+            else:
+                if not plot_filename.endswith('.png'):
+                    plot_filename += '.png'
+        elif args.pdf:
+            plot_filename = temp_dir + '/image.pdf'
         else:
-            plot_width = 600			# default values
-            plot_height = 500
+            plot_filename = temp_dir + '/image.png'
 
-        # Publish
-        key = 'ferretMagic.ferret'
 
-	#-------------------------------
-	# Set window
-        #(errval, errmsg) = pyferret.run('set window/xinches=20/thick=`%(plot_width)s/100`/xpixels=%(plot_width)s/ypixels=%(plot_height)s 1' % locals())
-        (errval, errmsg) = pyferret.run('set window/xinches=20/thick=`%(plot_width)s/200`/xpixels=%(plot_width)s/ypixels=%(plot_height)s 1' % locals())
-	# SDOUT handling
-        (errval, errmsg) = pyferret.run('set redirect/clobber/file="%(plot_dir)s/__ipy_ferret_tmp.txt" stdout' % locals())
-	# Cancel mode verify
+        # Make it quiet by default
         (errval, errmsg) = pyferret.run('cancel mode verify')
-	# Set graphics with or without antialias
-	if args.antialias:
-        	(errval, errmsg) = pyferret.run('set window/antialias')
-	else:
-        	(errval, errmsg) = pyferret.run('set window/noantialias')
-	# Run code
-	pyferret_error = False
+
+        if args.memory:
+            # Reset memory size in megabytes
+            mem_size = float(args.memory)
+            if mem_size > 0.0:
+                (errval, errmsg) = pyferret.run('set memory /size=%f' % (mem_size/8.0))
+
+        # Get image size and aspect ratio
+        if args.size:
+            plot_size = args.size.split(',')
+        else:
+            plot_size = _DEFAULT_PLOTSIZE.split(',')
+        plot_width  = float(plot_size[0])
+        plot_height = float(plot_size[1])
+        plot_aspect = plot_height / plot_width
+
+        # Set window size with the required aspect ratio; 
+        # always anti-alias with windows of these sizes
+        if args.bigger:
+            # Double the canvas size (both width and height) of the standard window 
+            # and double the standard line thickness
+            canvas_width = 2.0 * math.sqrt(10.5 * 8.5 / plot_aspect)
+            line_thicken = 2.0
+        else:
+            # Use a standard-size window with usual line thickness
+            canvas_width = math.sqrt(10.5 * 8.5 / plot_aspect)
+            line_thicken = 1.0
+        (errval, errmsg) = pyferret.run('set window /xinches=%f /thick=%f /aspect=%f 1' % \
+                                        (canvas_width, line_thicken, plot_aspect))
+
+        # Run code
+        pyferret_error = False
         for input in code:
-            input = unicode_to_str(input)
-            (errval, errmsg) = pyferret.run(input)
-            if errval != FERRET_OK :
-            	publish_display_data(key, {'text/html': 
-			'<pre style="background-color:#F79F81; border-radius: 4px 4px 4px 4px; font-size: smaller">' +
-            		'yes? %s\n' % input +
-			'error val = %s\nerror msg = %s' % (errval, errmsg) +
-			'</pre>' 
-		})
-		pyferret_error = True
-		break
-        # Create png file
-        (errval, errmsg) = pyferret.run('frame/file="%(plot_dir)s/__ipy_ferret_fig.png"' % locals())
-        if args.pdf:
-                (errval, errmsg) = pyferret.run('frame/file="%(pdf_filename)s"' % locals())
-	# Close stdout
+            # Ignore blank lines
+            if input:
+                input = unicode_to_str(input)
+                (errval, errmsg) = pyferret.run(input)
+                if errval != pyferret.FERR_OK:
+                    publish_display_data(_PUBLISH_KEY, {'text/html': 
+                        '<pre style="background-color:#F79F81; border-radius: 4px 4px 4px 4px; font-size: smaller">' +
+                        'yes? %s\n' % input +
+                        '** (LAST) ERROR MESSAGE: %s' % errmsg +
+                        '</pre>' 
+                    })
+                    pyferret_error = True
+                    break
+
+        # Create the image file; if no final image, no image file will be created.
+        # Any existing image with that filename will be versioned away ('.~n~' appended)
+        if not pyferret_error:
+            if args.pdf:
+                (errval, errmsg) = pyferret.run('frame /xinch=%f /file="%s" /format=PDF' % (plot_width/72.0, plot_filename) )
+            else:
+                (errval, errmsg) = pyferret.run('frame /xpixel=%f /file="%s" /format=PNG' % (plot_width, plot_filename))
+            if errval != pyferret.FERR_OK:
+                pyferret_error = True
+
+        # Close the window
+        (errval, errmsg) = pyferret.run('cancel window 1')
+
+        # Close the stdout and stderr redirect file
         (errval, errmsg) = pyferret.run('cancel redirect')
-	# Close window
-	(errval, errmsg) = pyferret.run('cancel window 1')
-	#-------------------------------
+
+        #-------------------------------
 
         # Publish
         display_data = []
 
-        # Publish text output if not empty
-	if os.path.getsize("%(plot_dir)s/__ipy_ferret_tmp.txt" % locals()) != 0 : 
-		try:
-			text_outputs = []
-			text_outputs.append('<pre style="background-color:#ECF6CE; border-radius: 4px 4px 4px 4px; font-size: smaller">')
-        		f = open ("%(plot_dir)s/__ipy_ferret_tmp.txt" % locals(),"r")
-			for line in f:
-				text_outputs.append(line)
-			f.close()
-			text_outputs.append("</pre>")
-			text_output = "".join(text_outputs)
-        		display_data.append((key, {'text/html': text_output}))
-		except:
-			pass
+        # Publish captured stdout text, if any
+        if os.path.isfile(out_filename) and (os.path.getsize(out_filename) > 0): 
+            try:
+                text_outputs = []
+                text_outputs.append('<pre style="background-color:#ECF6CE; border-radius: 4px 4px 4px 4px; font-size: smaller">')
+                f = open(out_filename, "r")
+                for line in f:
+                    text_outputs.append(line)
+                f.close()
+                text_outputs.append("</pre>")
+                text_output = "".join(text_outputs)
+                display_data.append((_PUBLISH_KEY, {'text/html': text_output}))
+            except:
+                pass
 
         # Publish image if present
-	try:
-        	#image = open("%(plot_dir)s/__ipy_ferret_fig.png" % locals(), 'rb').read()
-        	#display_data.append((key, {'image/png': image}))
+        if not pyferret_error:
+           if args.pdf:
+               if os.path.isfile(plot_filename):
+                   # Create link to pdf; file visible from cell from files directory
+                   text_outputs = []
+                   text_outputs.append('<pre style="background-color:#F2F5A9; border-radius: 4px 4px 4px 4px; font-size: smaller">')
+                   text_outputs.append('Message: <a href="files/%s" target="_blank">%s</a> created.' % (plot_filename, plot_filename))
+                   text_outputs.append('</pre>')
+                   text_output = "".join(text_outputs)
+                   display_data.append((_PUBLISH_KEY, {'text/html': text_output}))
+                   # If the user did not provide the PDF filename, 
+                   # do not delete the temporary directory since the PDF is in there.
+                   if args.plotname:
+                       rmtree(temp_dir)
+               else:
+                   # Delete temporary directory - nothing to preserve
+                   rmtree(temp_dir)
+           else:
+               # Display the image in the notebook
+               try:
+                   f = open(plot_filename, 'rb')
+                   image = f.read().encode('base64')
+                   f.close()
+                   display_data.append((_PUBLISH_KEY, {'text/html': '<div class="myoutput">' + 
+                       '<img src="data:image/png;base64,%s"/></div>' % image}))
+               except:
+                   pass
+               # Delete temporary directory - PNG encoded in the string
+               rmtree(temp_dir)
 
-        	image = open("%(plot_dir)s/__ipy_ferret_fig.png" % locals(), 'rb').read().encode('base64')
-        	display_data.append((key, {'text/html': 
-			#'<img src="data:image/png;base64,%(image)s" width="%(plot_width)s" height="%(plot_height)s" />' % locals() }))
-			#'<div>' + '<img src="data:image/png;base64,%(image)s" width="%(plot_width)s" height="%(plot_height)s" />' % locals() + '</div>' }))
-			'<div class="myoutput">' + '<img src="data:image/png;base64,%(image)s"/>' % locals() + '</div>' }))
-
-	except:
-		pass
-
-	# Delete temporary directory
-        rmtree(plot_dir)
-
-	# Set output as pdf
-        if args.pdf and not pyferret_error:
-		#-------------------------------
-		pdf_file = tempfile.NamedTemporaryFile(prefix='_ipy_ferret_fig_', dir='.', suffix='.pdf', delete=False)
-		pdf_filename = os.path.basename(pdf_file.name)
-		# Start of ferret script for pdf output
-		(errval, errmsg) = pyferret.run('set mode metafile:"%(pdf_filename)s"' % locals())
-		# Set window with correct aspect
-        	(errval, errmsg) = pyferret.run('set window/aspect=`%(plot_height)s/%(plot_width)s` 1' % locals())
-		# Run code
-        	for input in code:
-            		input = unicode_to_str(input)
-            		(errval, errmsg) = pyferret.run(input)
-            		if errval != FERRET_OK :
-				break
-		# Close output file 
-        	(errval, errmsg) = pyferret.run('cancel mode metafile')
-		# Close window
-		(errval, errmsg) = pyferret.run('cancel window 1')
-		#-------------------------------
-
-        	# Create link to pdf if no error and file exist
-        	if not pyferret_error and os.path.isfile(pdf_filename):
-			text_outputs = []
-			text_outputs.append('<pre style="background-color:#F2F5A9; border-radius: 4px 4px 4px 4px; font-size: smaller">')
-			# file visible from cell from files directory
-            		text_outputs.append('Message: <a href="files/%(pdf_filename)s" target="_blank">%(pdf_filename)s</a> created.' % locals())
-            		text_outputs.append('</pre>')
-			text_output = "".join(text_outputs)
-        		display_data.append((key, {'text/html': text_output}))
-
-	# Publication
+        # Publication
         for source, data in display_data:
-          	publish_display_data(source, data)
+              publish_display_data(source, data)
 
 
 #----------------------------------------------------
     @magic_arguments()
     @argument(
-        '-m', '--memory', type=int,
-        help='Physical memory used by ferret expressed in megawords. Default is 50 megawords = 400 megabytes.'
+        '-m', '--memory', type=float,
+        help='Memory, in megabytes, to be used by ferret henceforth. Startup default is %s' % str(_DEFAULT_MEMSIZE)
         )
     @argument(
         '-s', '--size',
-        help='Pixel size of plots, "width x height". Default is "-s 600x500".'
+        help='Pixel size of PNG images, or point size of PDF images, as "width,height". Default is ' + _DEFAULT_PLOTSIZE
         )
     @argument(
-        '-a', '--antialias', default=False, action='store_true',
-        help='Use anti-aliasing technics to improve the appearance of images and get smoother edges.' 
+        '-b', '--bigger', default=False, action='store_true',
+        help='Produce a sharper plot by doubling the standard plot window size before scaling'
         )
     @argument(
         '-p', '--pdf', default=False, action='store_true',
-        help='Output plot as a pdf file. Extension must be ".pdf". Size has no matter since pdf is a vector output.'
+        help='Generate the output plot as a PDF file.'
+        )
+    @argument(
+        '-f', '--plotname',
+        help='Name of the image file to create.  If not given, a name will be generated.'
         )
     @cell_magic
     def ferret(self, line, cell):
@@ -244,46 +262,48 @@ class ferretMagics(Magics):
                 ...: plot i[i=1:100]
 
         '''
-	args = parse_argstring(self.ferret, line)
-	code = cell.split('\n')
-
-    	self.ferret_run_code(args, code)
+        args = parse_argstring(self.ferret, line)
+        code = cell.split('\n')
+        self.ferret_run_code(args, code)
 
 #----------------------------------------------------
     @magic_arguments()
     @argument(
-        '-m', '--memory', type=int,
-        help='Physical memory used by ferret expressed in megawords. Default is 50 megawords = 400 megabytes.'
+        '-m', '--memory', type=float,
+        help='Memory, in megabytes, to be used by ferret henceforth. Startup default is %s' % str(_DEFAULT_MEMSIZE)
         )
     @argument(
         '-s', '--size',
-        help='Pixel size of plots, "width x height". Default is "-s 600x500".'
+        help='Pixel size of PNG images, or point size of PDF images, as "width,height". Default is ' + _DEFAULT_PLOTSIZE
         )
     @argument(
-        '-a', '--antialias', default=False, action='store_true',
-        help='Use anti-aliasing technics to improve the appearance of images and get smoother edges.' 
+        '-b', '--bigger', default=False, action='store_true',
+        help='Produce a sharper plot by doubling the standard plot window size before scaling'
         )
     @argument(
         '-p', '--pdf', default=False, action='store_true',
-        help='Output plot as a pdf file. Extension must be ".pdf". Size has no matter since pdf is a vector output.'
+        help='Generate the output plot as a PDF file.'
+        )
+    @argument(
+        '-f', '--plotname',
+        help='Name of the image file to create.  If not given, a name will be generated.'
         )
     @argument(
         'string',
-	nargs='*'
+        nargs='*'
         )
     @line_magic
     def ferret_run(self, line):
         '''
         Line-level magic to run a command in ferret. 
 
-            In [12]: for i in [100,500,1000]:
-               ....: 	%ferret_run -a -s 400,400 'plot sin(i[i=1:%(i)s]*0.1)' % locals()
+            In [12]: for val in [100,500,1000]:
+               ....:     %ferret_run -s 400,400 -b 'plot sin(i[i=1:%(val)s]*0.1)' % locals()
 
         '''
-	args = parse_argstring(self.ferret_run, line)
-	code = [self.shell.ev(" ".join(args.string))]
-
-    	self.ferret_run_code(args, code)
+        args = parse_argstring(self.ferret_run, line)
+        code = [self.shell.ev(" ".join(args.string))]
+        self.ferret_run_code(args, code)
 
 #----------------------------------------------------
     @magic_arguments()
@@ -293,7 +313,7 @@ class ferretMagics(Magics):
         )
     @argument(
         'code',
-	nargs='*'
+        nargs='*'
         )
     @line_magic
     def ferret_getdata(self, line):
@@ -303,24 +323,24 @@ class ferretMagics(Magics):
             In [18]: %%ferret
                ....: use levitus_climatology
             In [19]: %ferret_getdata tempdict = temp
-	       ....: Message: tempdict is now available in python as a dictionary containing the variable's metadata and data array.
+           ....: Message: tempdict is now available in python as a dictionary containing the variable's metadata and data array.
             In [20]: print tempdict.keys()
-	       ....: ['axis_coords', 'axis_types', 'data_unit', 'axis_units', 'title', 'axis_names', 'missing_value', 'data']
+           ....: ['axis_coords', 'axis_types', 'data_unit', 'axis_units', 'title', 'axis_names', 'missing_value', 'data']
 
         '''
 
-	args = parse_argstring(self.ferret_getdata, line)
+        args = parse_argstring(self.ferret_getdata, line)
 
-	code = unicode_to_str(args.code[0])
-	pythonvariable = code.split('=')[0]
-	ferretvariable = code.split('=')[1]
-	exec('%s = pyferret.getdata("%s", %s)' % (pythonvariable, ferretvariable, args.create_mask) )
-	self.shell.push("%s" % pythonvariable)
+        code = unicode_to_str(args.code[0])
+        pythonvariable = code.split('=')[0]
+        ferretvariable = code.split('=')[1]
+        exec('%s = pyferret.getdata("%s", %s)' % (pythonvariable, ferretvariable, args.create_mask) )
+        self.shell.push("%s" % pythonvariable)
         publish_display_data('ferretMagic.ferret', {'text/html': 
-		'<pre style="background-color:#F2F5A9; border-radius: 4px 4px 4px 4px; font-size: smaller">' +
-		'Message: ' + pythonvariable + " is now available in python as a dictionary containing the variable's metadata and data array."
-		'</pre>' 
-	})
+            '<pre style="background-color:#F2F5A9; border-radius: 4px 4px 4px 4px; font-size: smaller">' +
+            'Message: ' + pythonvariable + " is now available in python as a dictionary containing the variable's metadata and data array."
+            '</pre>' 
+        })
 
 #----------------------------------------------------
     @magic_arguments()
@@ -330,7 +350,7 @@ class ferretMagics(Magics):
         )
     @argument(
         'code',
-	nargs='*'
+        nargs='*'
         )
     @line_magic
     def ferret_putdata(self, line):
@@ -345,23 +365,23 @@ class ferretMagics(Magics):
                ....: b['data']=np.sin(x)/x
                ....: b.keys()
             Out[31]: ['data', 'name']
-	    In [32]: %ferret_putdata --axis_pos (1,0,2,3,4,5) b
-	       ....: Message: b is now available in ferret as myvar
+        In [32]: %ferret_putdata --axis_pos (1,0,2,3,4,5) b
+           ....: Message: b is now available in ferret as myvar
 
         '''
-	args = parse_argstring(self.ferret_putdata, line)
+        args = parse_argstring(self.ferret_putdata, line)
 
-	ferretvariable = unicode_to_str(args.code[0])
-	if args.axis_pos:
-		axis_pos_variable = eval(args.axis_pos)
-	else:
-		axis_pos_variable = None
-	pyferret.putdata(self.shell.user_ns[ferretvariable], axis_pos=axis_pos_variable)
+        ferretvariable = unicode_to_str(args.code[0])
+        if args.axis_pos:
+            axis_pos_variable = eval(args.axis_pos)
+        else:
+            axis_pos_variable = None
+        pyferret.putdata(self.shell.user_ns[ferretvariable], axis_pos=axis_pos_variable)
         publish_display_data('ferretMagic.ferret', {'text/html': 
-		'<pre style="background-color:#F2F5A9; border-radius: 4px 4px 4px 4px; font-size: smaller">' +
-		'Message: ' + ferretvariable + ' is now available in ferret as ' + self.shell.user_ns[ferretvariable]['name'] + 
-		'</pre>' 
-	})
+            '<pre style="background-color:#F2F5A9; border-radius: 4px 4px 4px 4px; font-size: smaller">' +
+            'Message: ' + ferretvariable + ' is now available in ferret as ' + self.shell.user_ns[ferretvariable]['name'] + 
+            '</pre>' 
+        })
 
 
 #----------------------------------------------------
@@ -372,7 +392,7 @@ __doc__ = __doc__.format(
     ferret_PUTDATA_DOC = ' '*8 + ferretMagics.ferret_putdata.__doc__
     )
 
-
 def load_ipython_extension(ip):
     """Load the extension in IPython."""
     ip.register_magics(ferretMagics)
+
