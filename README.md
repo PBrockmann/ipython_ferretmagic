@@ -12,6 +12,8 @@ Once you can import the pyferret module in python then install the ipython noteb
 In IPython, install ferretmagic:
 
     In [1]: %install_ext https://raw.github.com/PBrockmann/ipython-ferretmagic/master/ferretmagic.py
+
+Tested with pyferret 1.0.2 and IPython Notebook 1.2.1 and 2.0.0
     
 ## Usage
 
@@ -25,7 +27,7 @@ The `%ferret_run` magic enables one-line execution of ferret command in the IPyt
 
 ```
     In [3]: for i in [100,500,1000]:
-      ....: 	%ferret_run -a -s 400,400 'plot sin(i[i=1:%(i)s]*0.1)' % locals()
+      ....: 	%ferret_run -s 400,400 'plot sin(i[i=1:%(i)s]*0.1)' % locals()
 ```
 
 ### Cell magics
@@ -40,10 +42,9 @@ In [4]: %%ferret
 
 * Control size of plot with --size, -s option.
 * Create a local pdf at the same time with --pdf, -p option.
-* Improve your graphic with antialiasing with --antialias, -a option.
 
 ```
-In [5]: %%ferret -a -s 400,300 -pdf myfig.pdf
+In [5]: %%ferret -s 400,300 -pdf myfig.pdf
   ....: shade temp[k=1]			
 ```
 
