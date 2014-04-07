@@ -90,7 +90,7 @@ class ferretMagics(Magics):
 
         # Redirect stdout and stderr to file
         out_filename = temp_dir + '/output.txt' 
-        (errval, errmsg) = pyferret.run('set redirect /clobber /file="%s" stdout stderr' % out_filename)
+        (errval, errmsg) = pyferret.run('set redirect /clobber /file="%s" stdout' % out_filename)
 
         # Filename for saving the final plot (if any)
         if args.plotname:
@@ -147,10 +147,11 @@ class ferretMagics(Magics):
                 input = unicode_to_str(input)
                 (errval, errmsg) = pyferret.run(input)
                 if errval != pyferret.FERR_OK:
+                    errmsg = errmsg.replace('\\', '<br />')
                     publish_display_data(_PUBLISH_KEY, {'text/html': 
                         '<pre style="background-color:#F79F81; border-radius: 4px 4px 4px 4px; font-size: smaller">' +
                         'yes? %s\n' % input +
-                        '** (LAST) ERROR MESSAGE: %s' % errmsg +
+                        '%s' % errmsg +
                         '</pre>' 
                     })
                     pyferret_error = True
