@@ -332,7 +332,7 @@ class ferretMagics(Magics):
 
         args = parse_argstring(self.ferret_getdata, line)
 
-        code = unicode_to_str(args.code[0])
+        code = unicode_to_str(''.join(args.code))
         pythonvariable = code.split('=')[0]
         ferretvariable = code.split('=')[1]
         exec('%s = pyferret.getdata("%s", %s)' % (pythonvariable, ferretvariable, args.create_mask) )
