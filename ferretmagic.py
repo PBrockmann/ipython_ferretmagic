@@ -172,7 +172,8 @@ class ferretMagics(Magics):
         (errval, errmsg) = pyferret.run('cancel window 1')
 
         # Close the stdout and stderr redirect file
-        (errval, errmsg) = pyferret.run('cancel redirect')
+        if not(args.quiet):
+        	(errval, errmsg) = pyferret.run('cancel redirect')
 
         #-------------------------------
 
