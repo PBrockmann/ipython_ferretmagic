@@ -90,7 +90,8 @@ class ferretMagics(Magics):
 
         # Redirect stdout and stderr to file
         out_filename = temp_dir + '/output.txt' 
-        (errval, errmsg) = pyferret.run('set redirect /clobber /file="%s" stdout' % out_filename)
+        if not(args.quiet):
+		(errval, errmsg) = pyferret.run('set redirect /clobber /file="%s" stdout' % out_filename)
 
         # Filename for saving the final plot (if any)
         if args.plotname:
@@ -241,11 +242,15 @@ class ferretMagics(Magics):
         )
     @argument(
         '-b', '--bigger', default=False, action='store_true',
-        help='Produce a sharper plot by doubling the standard plot window size before scaling'
+        help='Produce a sharper plot by doubling the standard plot window size before scaling.'
         )
     @argument(
         '-p', '--pdf', default=False, action='store_true',
         help='Generate the output plot as a PDF file.'
+        )
+    @argument(
+        '-q', '--quiet', default=False, action='store_true',
+        help='Do not display stdout.'
         )
     @argument(
         '-f', '--plotname',
@@ -279,11 +284,15 @@ class ferretMagics(Magics):
         )
     @argument(
         '-b', '--bigger', default=False, action='store_true',
-        help='Produce a sharper plot by doubling the standard plot window size before scaling'
+        help='Produce a sharper plot by doubling the standard plot window size before scaling.'
         )
     @argument(
         '-p', '--pdf', default=False, action='store_true',
         help='Generate the output plot as a PDF file.'
+        )
+    @argument(
+        '-q', '--quiet', default=False, action='store_true',
+        help='Do not display stdout.'
         )
     @argument(
         '-f', '--plotname',
