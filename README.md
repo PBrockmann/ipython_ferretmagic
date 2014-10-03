@@ -15,7 +15,7 @@ In IPython, install ferretmagic:
 
     In [1]: %install_ext https://raw.github.com/PBrockmann/ipython-ferretmagic/master/ferretmagic.py
 
-Tested with pyferret 1.0.2 and IPython Notebook 1.2.1, 2.0.0, 2.1.0
+Tested with pyferret 1.0.2 and IPython Notebook 2.3
     
 ## Usage
 
