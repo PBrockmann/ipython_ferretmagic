@@ -34,6 +34,7 @@ Usage
 #-----------------------------------------------------------------------------
 #  Patrick.Brockmann@lsce.ipsl.fr
 #  Started 2013/08/28 then put on github.com 2013/09/06
+#  https://github.com/PBrockmann/ipython-ferretmagic
 #
 #-----------------------------------------------------------------------------
 
@@ -303,8 +304,9 @@ class ferretMagics(Magics):
         'string',
         nargs='*'
         )
+    @needs_local_scope
     @line_magic
-    def ferret_run(self, line):
+    def ferret_run(self, line, local_ns=None):
         '''
         Line-level magic to run a command in ferret. 
 
@@ -313,7 +315,8 @@ class ferretMagics(Magics):
 
         '''
         args = parse_argstring(self.ferret_run, line)
-        code = [self.shell.ev(" ".join(args.string))]
+        #code = [self.shell.ex(" ".join(args.string))]
+        code = [eval(" ".join(args.string), local_ns)]
         self.ferret_run_code(args, code)
 
 #----------------------------------------------------
