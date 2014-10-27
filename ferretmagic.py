@@ -36,6 +36,8 @@ Usage
 #  Started 2013/08/28 then put on github.com 2013/09/06
 #  https://github.com/PBrockmann/ipython-ferretmagic
 #
+#  Lock functions are taken from ipythonPexpect magic
+#  https://cdcvs.fnal.gov/redmine/projects/ipython_ext/repository/revisions/master/raw/ipythonPexpect.py
 #-----------------------------------------------------------------------------
 
 import os.path
@@ -75,6 +77,9 @@ class ferretMagics(Magics):
             pyferret.start(memsize=(_DEFAULT_MEMSIZE/8.0), verify=False, journal=False, unmapped=True, quiet=True)
         except ExceptionPexpect:
             raise ferretMagicError('pyferret cannot be started')
+
+        self._shell = shell
+        self._shell.ferret_locked = False
 
 #----------------------------------------------------
     def ferret_run_code(self, args, code):
@@ -345,7 +350,7 @@ class ferretMagics(Magics):
 
         args = parse_argstring(self.ferret_getdata, line)
 
-        code = unicode_to_str(args.code[0])
+        code = unicode_to_str(''.join(args.code))
         pythonvariable = code.split('=')[0]
         ferretvariable = code.split('=')[1]
         exec('%s = pyferret.getdata("%s", %s)' % (pythonvariable, ferretvariable, args.create_mask) )
@@ -396,6 +401,56 @@ class ferretMagics(Magics):
             'Message: ' + ferretvariable + ' is now available in ferret as ' + self.shell.user_ns[ferretvariable]['name'] + 
             '</pre>' 
         })
+
+    @line_magic
+    def ferret_lock(self, line):
+        '''
+        Lock the notebook to send EVERY executed cell through pyferret
+      
+        Do %ferret_unlock to unlock
+        '''
+    
+        self._shell.ferret_locked = True
+
+        print 'WARNING: All future cell execution will be processed through pyferret!'
+        print 'To return to IPython, issue %ferret_unlock'
+
+    @line_magic
+    def ferret_unlock(self, line):
+        '''
+          Unlock the notebook to return to regular IPython
+        '''
+
+    
+        self._shell.ferret_locked = False
+    
+        print 'Notebook will use IPython'
+
+# Let's rewrite InteractiveShell.run_cell to do automatic processing with pyferret,
+# if desired
+from IPython.core.interactiveshell import InteractiveShell
+
+# Let's copy the original "run_cell" method (we do this only once so we can reload)
+if not getattr(InteractiveShell, "run_cell_a", False):
+  InteractiveShell.run_cell_a = InteractiveShell.run_cell
+
+# Now rewrite run_cell
+def run_cell_new(self, raw_cell, store_history=False, silent=False, shell_futures=True):
+  
+  # Are we locked in pyferret?
+  if getattr(self, "ferret_locked", False):
+  
+    # Don't alter cells that start with %%ferret or with %ferret_unlock
+    if raw_cell[:8] == '%%ferret' or raw_cell[:15] == '%ferret_unlock':
+      pass
+    else:
+      # We're going to add a %%ferret to the top
+      raw_cell = "%%ferret\n" + raw_cell
+
+  self.run_cell_a(raw_cell, store_history, silent, shell_futures)
+
+# And assign it
+InteractiveShell.run_cell = run_cell_new
 
 
 #----------------------------------------------------
