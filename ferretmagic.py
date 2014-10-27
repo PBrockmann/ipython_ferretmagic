@@ -29,6 +29,14 @@ Usage
 
 {ferret_PUTDATA_DOC}
 
+``%ferret_lock``
+
+{ferret_LOCK_DOC}
+
+``%ferret_unlock``
+
+{ferret_UNLOCK_DOC}
+
 """
 
 #-----------------------------------------------------------------------------
@@ -408,6 +416,7 @@ class ferretMagics(Magics):
         Lock the notebook to send EVERY executed cell through pyferret
       
         Do %ferret_unlock to unlock
+
         '''
     
         self._shell.ferret_locked = True
@@ -458,7 +467,9 @@ __doc__ = __doc__.format(
     ferret_DOC = ' '*8 + ferretMagics.ferret.__doc__,
     ferret_RUN_DOC = ' '*8 + ferretMagics.ferret_run.__doc__,
     ferret_GETDATA_DOC = ' '*8 + ferretMagics.ferret_getdata.__doc__,
-    ferret_PUTDATA_DOC = ' '*8 + ferretMagics.ferret_putdata.__doc__
+    ferret_PUTDATA_DOC = ' '*8 + ferretMagics.ferret_putdata.__doc__,
+    ferret_LOCK_DOC = ' '*8 + ferretMagics.ferret_lock.__doc__,
+    ferret_UNLOCK_DOC = ' '*8 + ferretMagics.ferret_unlock.__doc__
     )
 
 def load_ipython_extension(ip):
