@@ -240,6 +240,10 @@ class ferretMagics(Magics):
                # Delete temporary directory - PNG encoded in the string
                rmtree(temp_dir)
 
+	# Error in ferret code - Delete temporary directory 
+	else: 
+           rmtree(temp_dir)
+
         # Publication
         for source, data in display_data:
               publish_display_data(source, data)
