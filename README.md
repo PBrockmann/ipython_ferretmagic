@@ -5,6 +5,12 @@ IPython notebook extension for ferret (a great software for Data Visualisation a
 
 Browse the demo notebooks from http://nbviewer.ipython.org/github/PBrockmann/ipython-ferretmagic/tree/master/
 
+## Latest commit
+
+Combine pyferret and ipython widgets
+
+![ScreenShot](ferretmagic_widgets.png)
+
 ## Installation
 
 Install pyferret following instructions from http://ferret.pmel.noaa.gov/Ferret/documentation/pyferret.
