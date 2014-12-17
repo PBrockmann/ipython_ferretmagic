@@ -105,7 +105,7 @@ class ferretMagics(Magics):
         # Redirect stdout and stderr to file
         out_filename = temp_dir + '/output.txt' 
         if not(args.quiet):
-		(errval, errmsg) = pyferret.run('set redirect /clobber /file="%s" stdout' % out_filename)
+            (errval, errmsg) = pyferret.run('set redirect /clobber /file="%s" stdout' % out_filename)
 
         # Filename for saving the final plot (if any)
         if args.plotname:
@@ -168,7 +168,7 @@ class ferretMagics(Magics):
                         'yes? %s\n' % input +
                         '%s' % errmsg +
                         '</pre>' 
-                    })
+			})
                     pyferret_error = True
                     break
 
