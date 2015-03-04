@@ -54,13 +54,12 @@ import math
 import pyferret
 from shutil import rmtree
 
-from IPython.core.displaypub import publish_display_data
+from IPython.display import publish_display_data
 from IPython.core.magic import Magics, magics_class, line_magic, cell_magic, needs_local_scope
 from IPython.core.magic_arguments import argument, magic_arguments, parse_argstring
 from IPython.utils.py3compat import unicode_to_str
 from pexpect import ExceptionPexpect
 
-_PUBLISH_KEY = 'ferretMagic.ferret'
 _DEFAULT_PLOTSIZE = '756.0,612.0'
 _DEFAULT_MEMSIZE = 400.0
 
@@ -163,7 +162,7 @@ class ferretMagics(Magics):
                 (errval, errmsg) = pyferret.run(input)
                 if errval != pyferret.FERR_OK:
                     errmsg = errmsg.replace('\\', '<br />')
-                    publish_display_data(_PUBLISH_KEY, {'text/html': 
+                    publish_display_data({'text/html': 
                         '<pre style="background-color:#F79F81; border-radius: 4px 4px 4px 4px; font-size: smaller">' +
                         'yes? %s\n' % input +
                         '%s' % errmsg +
@@ -205,7 +204,7 @@ class ferretMagics(Magics):
                 f.close()
                 text_outputs.append("</pre>")
                 text_output = "".join(text_outputs)
-                display_data.append((_PUBLISH_KEY, {'text/html': text_output}))
+                display_data.append(({'text/html': text_output}))
             except:
                 pass
 
@@ -219,7 +218,7 @@ class ferretMagics(Magics):
                    text_outputs.append('Message: <a href="files/%s" target="_blank">%s</a> created.' % (plot_filename, plot_filename))
                    text_outputs.append('</pre>')
                    text_output = "".join(text_outputs)
-                   display_data.append((_PUBLISH_KEY, {'text/html': text_output}))
+                   display_data.append(({'text/html': text_output}))
                    # If the user did not provide the PDF filename, 
                    # do not delete the temporary directory since the PDF is in there.
                    if args.plotname:
@@ -233,7 +232,7 @@ class ferretMagics(Magics):
                    f = open(plot_filename, 'rb')
                    image = f.read().encode('base64')
                    f.close()
-                   display_data.append((_PUBLISH_KEY, {'text/html': '<div class="myoutput">' + 
+                   display_data.append(({'text/html': '<div class="myoutput">' + 
                        '<img src="data:image/png;base64,%s"/></div>' % image}))
                except:
                    pass
@@ -245,8 +244,8 @@ class ferretMagics(Magics):
            rmtree(temp_dir)
 
         # Publication
-        for source, data in display_data:
-              publish_display_data(source, data)
+        for data in display_data:
+              publish_display_data(data)
 
 
 #----------------------------------------------------
@@ -367,7 +366,7 @@ class ferretMagics(Magics):
         ferretvariable = code.split('=')[1]
         exec('%s = pyferret.getdata("%s", %s)' % (pythonvariable, ferretvariable, args.create_mask) )
         self.shell.push("%s" % pythonvariable)
-        publish_display_data('ferretMagic.ferret', {'text/html': 
+        publish_display_data({'text/html': 
             '<pre style="background-color:#F2F5A9; border-radius: 4px 4px 4px 4px; font-size: smaller">' +
             'Message: ' + pythonvariable + " is now available in python as a dictionary containing the variable's metadata and data array."
             '</pre>' 
@@ -408,7 +407,7 @@ class ferretMagics(Magics):
         else:
             axis_pos_variable = None
         pyferret.putdata(self.shell.user_ns[ferretvariable], axis_pos=axis_pos_variable)
-        publish_display_data('ferretMagic.ferret', {'text/html': 
+        publish_display_data({'text/html': 
             '<pre style="background-color:#F2F5A9; border-radius: 4px 4px 4px 4px; font-size: smaller">' +
             'Message: ' + ferretvariable + ' is now available in ferret as ' + self.shell.user_ns[ferretvariable]['name'] + 
             '</pre>' 
