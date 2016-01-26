@@ -17,11 +17,11 @@ Install pyferret following instructions from http://ferret.pmel.noaa.gov/Ferret/
 
 Once you can import the pyferret module in ipython then install the ipython notebook extension.
 
-In IPython, install ferretmagic:
+In IPython, install ferretmagic (you get a warning I have to figure out):
 
     In [1]: %install_ext https://raw.github.com/PBrockmann/ipython-ferretmagic/master/ferretmagic.py
 
-Tested with pyferret 1.1.0 and Jupiter 3.0.0 
+Tested with pyferret 1.2.0 and Jupiter 4.0.x
     
 ## Usage
 
