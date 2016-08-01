@@ -19,7 +19,7 @@ First install PyFerret following instructions from http://ferret.pmel.noaa.gov/F
 It will set all directories needed to run pyferret (font, ppl, jnls, datasets, ...).
 
 Install also PyFerret as a conda package from https://anaconda.org/conda-forge/pyferret
-The ferret magic extension is part of the distribution.
+The ferret magic extension is now distributed from this package.
     
 ## Usage
 
