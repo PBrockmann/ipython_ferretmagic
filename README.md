@@ -7,7 +7,7 @@ Browse the demo notebooks from http://nbviewer.ipython.org/github/PBrockmann/ipy
 
 ## Latest news 
 
-Tested with pyferret 7.0 and Jupiter 4.1
+Tested with PyFerret 7.0 and Jupyter 4.1
 
 Combine pyferret and ipython widgets and create interactive notebooks !
 
@@ -15,10 +15,10 @@ Combine pyferret and ipython widgets and create interactive notebooks !
 
 ## Installation
 
-First install pyferret following instructions from http://ferret.pmel.noaa.gov/Ferret/documentation/pyferret
+First install PyFerret following instructions from http://ferret.pmel.noaa.gov/Ferret/documentation/pyferret
 It will set all directories needed to run pyferret (font, ppl, jnls, datasets, ...).
 
-Install also pyferret as a conda package from https://anaconda.org/conda-forge/pyferret
+Install also PyFerret as a conda package from https://anaconda.org/conda-forge/pyferret
 The ferret magic extension is part of the distribution.
     
 ## Usage
