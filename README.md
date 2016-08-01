@@ -7,27 +7,25 @@ Browse the demo notebooks from http://nbviewer.ipython.org/github/PBrockmann/ipy
 
 ## Latest news 
 
+Tested with pyferret 7.0 and Jupiter 4.1
+
 Combine pyferret and ipython widgets and create interactive notebooks !
 
 ![ScreenShot](ferretmagic_widgets.png)
 
 ## Installation
 
-Install pyferret following instructions from http://ferret.pmel.noaa.gov/Ferret/documentation/pyferret.
+First install pyferret following instructions from http://ferret.pmel.noaa.gov/Ferret/documentation/pyferret
+It will set all directories needed to run pyferret (font, ppl, jnls, datasets, ...).
 
-Once you can import the pyferret module in ipython then install the ipython notebook extension.
-
-In IPython, install ferretmagic (you get a warning I have to figure out):
-
-    In [1]: %install_ext https://raw.github.com/PBrockmann/ipython-ferretmagic/master/ferretmagic.py
-
-Tested with pyferret 1.2.0 and Jupiter 4.0.x
+Install also pyferret as a conda package from https://anaconda.org/conda-forge/pyferret
+The ferret magic extension is part of the distribution.
     
 ## Usage
 
-In IPython, load the magics:
+In a Jupyter notebook with kernel python (previously named ipython), load the magics:
 
-    In [2]: %reload_ext ferretmagic
+    In [2]: %load_ext ferretmagic
    
 ### Line magics
 
