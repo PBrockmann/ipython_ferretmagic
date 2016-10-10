@@ -243,7 +243,9 @@ class ferretMagics(Magics):
 
         # Publication
         for source, data in display_data:
-              publish_display_data(source, data)
+	      # http://ipython.readthedocs.io/en/stable/api/generated/IPython.display.html#IPython.display.publish_display_data
+	      # --> source unused
+              publish_display_data(data)
 
 
 #----------------------------------------------------
