@@ -1,9 +1,9 @@
 from distutils.core import setup
 
 setup(
-  name = 'ipython_ferretmagic',
-  packages = ['ipython_ferretmagic'],
-  py_modules = ['ipython_ferretmagic'],
+  name = 'ferretmagic',
+  packages = ['ferretmagic'],
+  py_modules = ['ferretmagic'],
   version = '2016.10',
   description = 'ipython extension for pyferret',
   author = 'Patrick Brockmann',
