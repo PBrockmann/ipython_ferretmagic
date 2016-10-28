@@ -459,7 +459,7 @@ def run_cell_new(self, raw_cell, store_history=False, silent=False, shell_future
       # We're going to add a %%ferret to the top
       raw_cell = "%%ferret\n" + raw_cell
 
-  self.run_cell_a(raw_cell, store_history, silent, shell_futures)
+  return self.run_cell_a(raw_cell, store_history, silent, shell_futures)
 
 # And assign it
 InteractiveShell.run_cell = run_cell_new
