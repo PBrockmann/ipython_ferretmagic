@@ -42,7 +42,7 @@ Usage
 #-----------------------------------------------------------------------------
 #  Patrick.Brockmann@lsce.ipsl.fr
 #  Started 2013/08/28 then put on github.com 2013/09/06
-#  https://github.com/PBrockmann/ipython-ferretmagic
+#  https://github.com/PBrockmann/ipython_ferretmagic
 #
 #  Lock functions are taken from ipythonPexpect magic
 #  https://cdcvs.fnal.gov/redmine/projects/ipython_ext/repository/revisions/master/raw/ipythonPexpect.py
