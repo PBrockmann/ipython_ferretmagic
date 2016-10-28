@@ -161,7 +161,7 @@ class ferretMagics(Magics):
                 (errval, errmsg) = pyferret.run(input)
                 if errval != pyferret.FERR_OK:
                     errmsg = errmsg.replace('\\', '<br />')
-                    publish_display_data(_PUBLISH_KEY, {'text/html': 
+                    publish_display_data({'text/html': 
                         '<pre style="background-color:#F79F81; border-radius: 4px 4px 4px 4px; font-size: smaller">' +
                         'yes? %s\n' % input +
                         '%s' % errmsg +
@@ -367,7 +367,7 @@ class ferretMagics(Magics):
         ferretvariable = code.split('=')[1]
         exec('%s = pyferret.getdata("%s", %s)' % (pythonvariable, ferretvariable, args.create_mask) )
         self.shell.push("%s" % pythonvariable)
-        publish_display_data('ferretMagic.ferret', {'text/html': 
+        publish_display_data({'text/html': 
             '<pre style="background-color:#F2F5A9; border-radius: 4px 4px 4px 4px; font-size: smaller">' +
             'Message: ' + pythonvariable + " is now available in python as a dictionary containing the variable's metadata and data array."
             '</pre>' 
@@ -408,7 +408,7 @@ class ferretMagics(Magics):
         else:
             axis_pos_variable = None
         pyferret.putdata(self.shell.user_ns[ferretvariable], axis_pos=axis_pos_variable)
-        publish_display_data('ferretMagic.ferret', {'text/html': 
+        publish_display_data({'text/html': 
             '<pre style="background-color:#F2F5A9; border-radius: 4px 4px 4px 4px; font-size: smaller">' +
             'Message: ' + ferretvariable + ' is now available in ferret as ' + self.shell.user_ns[ferretvariable]['name'] + 
             '</pre>' 

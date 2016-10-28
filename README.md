@@ -2,16 +2,17 @@ ipython_ferretmagic
 ===================
 
 IPython notebook extension for ferret (a great software for Data Visualisation and Analysis from NOAA/PMEL).
+Browse the demo notebooks from http://nbviewer.ipython.org/github/PBrockmann/ipython_ferretmagic/tree/master/notebooks
 
-Browse the demo notebooks from http://nbviewer.ipython.org/github/PBrockmann/ipython_ferretmagic/tree/master/
+Combine ferret and ipython widgets and create interactive notebooks !
+
+![ScreenShot](./images/ferretmagic_widgets.png)
 
 ## Latest news 
 
-28/10/2016: Tested with PyFerret 7.0.0, jupyter 4.2.0 and ipython 5.1.0
-
-Combine pyferret and ipython widgets and create interactive notebooks !
-
-![ScreenShot](./images/ferretmagic_widgets.png)
+28/10/2016 
+ * Tested with PyFerret 7.0.0, jupyter 4.2.0 and ipython 5.1.0
+ * Installation from pip
 
 ## Installation
 
