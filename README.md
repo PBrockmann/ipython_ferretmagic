@@ -1,9 +1,9 @@
-ipython-ferretmagic
+ipython_ferretmagic
 ===================
 
 IPython notebook extension for ferret (a great software for Data Visualisation and Analysis from NOAA/PMEL).
 
-Browse the demo notebooks from http://nbviewer.ipython.org/github/PBrockmann/ipython-ferretmagic/tree/master/
+Browse the demo notebooks from http://nbviewer.ipython.org/github/PBrockmann/ipython_ferretmagic/tree/master/
 
 ## Latest news 
 
