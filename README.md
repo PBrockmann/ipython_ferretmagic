@@ -11,7 +11,7 @@ Browse the demo notebooks from http://nbviewer.ipython.org/github/PBrockmann/ipy
 
 Combine pyferret and ipython widgets and create interactive notebooks !
 
-![ScreenShot](.images/ferretmagic_widgets.png)
+![ScreenShot](./images/ferretmagic_widgets.png)
 
 ## Installation
 
