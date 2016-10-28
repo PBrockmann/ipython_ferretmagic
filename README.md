@@ -21,7 +21,7 @@ It will set all directories needed to run pyferret (font, ppl, jnls, datasets, .
 You can also install PyFerret as a conda package from https://anaconda.org/conda-forge/pyferret (no datasets distributed).
 
 Then download the ferret magic extension (ferretmagic.py) and the examples by typing
-```git clone https://github.com/PBrockmann/ipython_ferretmagic```
+```pip install ferretmagic```
     
 ## Usage
 
