@@ -54,6 +54,7 @@ import math
 import pyferret
 from shutil import rmtree
 
+from IPython.core.getipython import get_ipython
 from IPython.core.displaypub import publish_display_data
 from IPython.core.magic import Magics, magics_class, line_magic, cell_magic, needs_local_scope
 from IPython.core.magic_arguments import argument, magic_arguments, parse_argstring
@@ -479,3 +480,5 @@ def load_ipython_extension(ip):
     """Load the extension in IPython."""
     ip.register_magics(ferretMagics)
 
+if __name__ == "__main__":
+    load_ipython_extension(get_ipython())
