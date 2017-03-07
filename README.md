@@ -11,8 +11,11 @@ Combine ferret and ipython widgets and create interactive notebooks !
 
 ## Latest news 
 
+07/03/2017
+ * Tested with pyferret 7.1, jupyter 4.2.0, ipywidgets 6.0.0
+
 28/10/2016 
- * Tested with PyFerret 7.0.0, jupyter 4.2.0 and ipython 5.1.0
+ * Tested with pyferret 7.0, jupyter 4.2.0 and ipython 5.1.0
  * Installation from pip
 
 ## Installation
