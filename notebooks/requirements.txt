@@ -1,0 +1,2 @@
+ferretmagic==2016.10.28
+pyferret==7.3
