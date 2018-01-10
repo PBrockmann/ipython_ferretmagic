@@ -1,5 +1,11 @@
+name: pyferret-environment
 channels:
   - conda-forge
   - defaults
 dependancies:
+  - python==2.7
   - pyferret
+  - pandas
+  - numpy
+  - pip:
+        - ferretmagic==2016.10.28 

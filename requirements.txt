@@ -1,4 +1,0 @@
-numpy==1.13.3
-bokeh==0.12.13
-ferretmagic==2016.10.28
-pandas==0.21.0
