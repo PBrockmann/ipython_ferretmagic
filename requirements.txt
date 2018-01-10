@@ -1,0 +1,5 @@
+ferret_datasets
+pyferret
+pandas
+numpy
+ferretmagic==2016.10.28 
