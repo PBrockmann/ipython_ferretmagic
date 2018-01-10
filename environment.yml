@@ -8,4 +8,4 @@ dependencies:
   - pandas
   - numpy
   - pip:
-        - ferretmagic=2016.10.28 
+        - ferretmagic==2016.10.28 
