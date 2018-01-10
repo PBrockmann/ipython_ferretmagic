@@ -1,0 +1,10 @@
+channels:
+        - conda-forge
+        - defaults
+dependencies:
+        - ferret_datasets
+        - pyferret
+        - pandas
+        - numpy
+        - pip:
+                - ferretmagic==2016.10.28 
