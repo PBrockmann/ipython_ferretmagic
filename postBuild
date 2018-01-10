@@ -8,10 +8,5 @@ bash Miniconda2-latest-Linux-x86_64.sh -b -p $HOME/miniconda
 #=============================================================================
 $HOME/miniconda/bin/pip install ferretmagic==2016.10.28
 
-#=============================================================================
-$HOME/miniconda/bin/conda create -n FERRET -c conda-forge pyferret ferret_datasets --yes
-
-source activate FERRET
-
-
+$HOME/miniconda/bin/conda install -c conda-forge pyferret ferret_datasets
 
