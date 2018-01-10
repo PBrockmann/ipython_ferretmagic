@@ -7,6 +7,9 @@ Browse the demo notebooks from http://nbviewer.ipython.org/github/PBrockmann/ipy
 
 Combine ferret and ipython widgets and create interactive notebooks !
 
+Test it with binder.
+[![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/PBrockmann/ipython_ferretmagic/master)
+
 Browse a basic ferret tutorial using ferretmagic from: https://github.com/PBrockmann/C-CASCADES_notebooks/blob/master/ferretBasics.ipynb
 
 ![ScreenShot](./images/ferretmagic_widgets.png)
