@@ -2,7 +2,7 @@ name: pyferret-environment
 channels:
   - conda-forge
   - defaults
-dependancies:
+dependencies:
   - python=2.7
   - pyferret
   - pandas
