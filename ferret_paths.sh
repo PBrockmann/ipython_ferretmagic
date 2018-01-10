@@ -5,11 +5,11 @@
 
 ## The environment variable FER_DIR should be the pathname of the directory 
 ## of the PyFerret software.
-export FER_DIR="/opt/pyferret-7.3-RHEL7-64"
+export FER_DIR="pyferret-7.3-RHEL7-64"
 
 ## The environment variable FER_DSETS should be the pathname of the directory 
 ## of the Ferret demonstration data files.
-export FER_DSETS="/opt/ferret_dsets"
+export FER_DSETS="ferret_dsets"
 
 ## Set python_exe to the (optionally full-path) python executable to use
 python_exe="python"

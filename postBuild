@@ -1,9 +1,6 @@
 #!/bin/bash
 
 #==================================================================
-cd /opt
-
-#==================================================================
 wget https://github.com/NOAA-PMEL/PyFerret/releases/download/v7.3/pyferret-7.3-RHEL7-64.tar.gz
 tar xvfz pyferret-7.3-RHEL7-64.tar.gz
 
@@ -11,6 +8,4 @@ wget ftp://ftp.pmel.noaa.gov/ferret/pub/data/fer_dsets.tar.gz
 tar xvfz fer_dsets.tar.gz
 
 #==================================================================
-
-cp ~/ferret_paths.sh /opt/pyferret-7.3-RHEL7-64
-. /opt/pyferret-7.3-RHEL7-64/ferret_paths.sh
+. ferret_paths.sh
