@@ -1,12 +1,7 @@
 #!/bin/bash
 
 #=============================================================================
-wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh
+pip install ferretmagic==2016.10.28
 
-bash Miniconda2-latest-Linux-x86_64.sh -b -p $HOME/miniconda
-
-#=============================================================================
-$HOME/miniconda/bin/pip install ferretmagic==2016.10.28
-
-$HOME/miniconda/bin/conda install -c conda-forge pyferret ferret_datasets
+conda install -c conda-forge pyferret ferret_datasets
 
