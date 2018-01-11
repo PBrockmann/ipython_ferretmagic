@@ -3,7 +3,7 @@ channels:
         - defaults
 dependencies:
         - python=2.7
-        - cairo
+        - pycairo
         - ferret_datasets
         - pyferret
         - pandas
