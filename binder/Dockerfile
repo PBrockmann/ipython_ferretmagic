@@ -34,7 +34,7 @@ RUN git clone https://github.com/PBrockmann/fast
 
 #====================================================================================
 ENV FER_DIR=/opt/pyferret-7.3-RHEL7-64
-ENV FER_PALETTE=${HOME} /opt/pyferret-7.3-RHEL7-64/ppl /opt/fast
+ENV FER_PALETTE=${HOME}:/opt/pyferret-7.3-RHEL7-64/ppl:/opt/fast
 
 #====================================================================================
 # Make sure the contents of our repo are in ${HOME}
