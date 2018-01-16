@@ -3,9 +3,13 @@
 FROM python:2.7.14-stretch
 
 #====================================================================================
-RUN pip install --no-cache-dir notebook==5.*
 RUN apt-get update && apt-get -y install wget git
 RUN apt-get update && apt-get -y install libgfortran3
+
+RUN pip install --no-cache-dir notebook==5.*
+RUN pip install numpy pandas
+RUN pip install randomcolor
+RUN pip install ferretmagic==2016.10.28
 
 #====================================================================================
 ENV NB_USER agentk
