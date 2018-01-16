@@ -24,10 +24,10 @@ USER ${NB_USER}
 #====================================================================================
 # pyferret installation
 
+ADD https://github.com/NOAA-PMEL/PyFerret/releases/download/v7.3/pyferret-7.3-RHEL7-64.tar.gz /opt
+ADD ftp://ftp.pmel.noaa.gov/ferret/pub/data/fer_dsets.tar.gz /opt
 WORKDIR /opt
-ADD https://github.com/NOAA-PMEL/PyFerret/releases/download/v7.3/pyferret-7.3-RHEL7-64.tar.gz
 RUN tar xvfz pyferret-7.3-RHEL7-64.tar.gz
-ADD ftp://ftp.pmel.noaa.gov/ferret/pub/data/fer_dsets.tar.gz
 RUN tar xvfz fer_dsets.tar.gz
 
 
