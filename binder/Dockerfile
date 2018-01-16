@@ -5,6 +5,7 @@ FROM yuxiaorui/python-2.7-slim
 #====================================================================================
 RUN pip install --no-cache-dir notebook==5.*
 RUN apt-get update && apt-get -y install wget git
+RUN apt-get update && apt-get -y install libfreetype6
 
 #====================================================================================
 ENV NB_USER agentk
