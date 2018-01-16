@@ -5,7 +5,7 @@ FROM python:2.7.14-stretch
 #====================================================================================
 RUN pip install --no-cache-dir notebook==5.*
 RUN apt-get update && apt-get -y install wget git
-RUN apt-get update && apt-get -y install libpng
+RUN apt-get update && apt-get -y install libpng-dev
 
 #====================================================================================
 ENV NB_USER agentk
