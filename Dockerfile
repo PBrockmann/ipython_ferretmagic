@@ -16,15 +16,9 @@ RUN adduser --disabled-password \
     ${NB_USER}
 
 #====================================================================================
-# Make sure the contents of our repo are in ${HOME}
-COPY . ${HOME}
-USER root
-RUN chown -R ${NB_UID} ${HOME}
-USER ${NB_USER}
-
-#====================================================================================
 # pyferret installation
 
+USER root
 WORKDIR /opt
 RUN wget https://github.com/NOAA-PMEL/PyFerret/releases/download/v7.3/pyferret-7.3-RHEL7-64.tar.gz && \
     tar xvfz pyferret-7.3-RHEL7-64.tar.gz
@@ -34,5 +28,14 @@ RUN wget ftp://ftp.pmel.noaa.gov/ferret/pub/data/fer_dsets.tar.gz && \
 #====================================================================================
 # fast installation
 
+USER root
 WORKDIR /opt
 RUN git clone https://github.com/PBrockmann/fast
+
+#====================================================================================
+# Make sure the contents of our repo are in ${HOME}
+COPY . ${HOME}
+USER root
+RUN chown -R ${NB_UID} ${HOME}
+USER ${NB_USER}
+
