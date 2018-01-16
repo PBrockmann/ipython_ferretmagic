@@ -4,6 +4,7 @@ FROM yuxiaorui/python-2.7-slim
 
 #====================================================================================
 RUN pip install --no-cache-dir notebook==5.*
+RUN apt-get install -y wget
 
 #====================================================================================
 ENV NB_USER agentk
@@ -24,12 +25,11 @@ USER ${NB_USER}
 #====================================================================================
 # pyferret installation
 
-ADD https://github.com/NOAA-PMEL/PyFerret/releases/download/v7.3/pyferret-7.3-RHEL7-64.tar.gz /opt
-ADD ftp://ftp.pmel.noaa.gov/ferret/pub/data/fer_dsets.tar.gz /opt
 WORKDIR /opt
-RUN tar xvfz pyferret-7.3-RHEL7-64.tar.gz
-RUN tar xvfz fer_dsets.tar.gz
-
+RUN wget https://github.com/NOAA-PMEL/PyFerret/releases/download/v7.3/pyferret-7.3-RHEL7-64.tar.gz && \
+    tar xvfz pyferret-7.3-RHEL7-64.tar.gz
+RUN wget ftp://ftp.pmel.noaa.gov/ferret/pub/data/fer_dsets.tar.gz && \
+    tar xvfz fer_dsets.tar.gz
 
 #====================================================================================
 # fast installation
