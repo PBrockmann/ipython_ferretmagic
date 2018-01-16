@@ -5,7 +5,6 @@ FROM python:2.7.14-stretch
 #====================================================================================
 RUN pip install --no-cache-dir notebook==5.*
 RUN apt-get update && apt-get -y install wget git
-RUN apt-get update && apt-get -y install libpng-dev
 
 #====================================================================================
 ENV NB_USER agentk
@@ -15,6 +14,18 @@ RUN adduser --disabled-password \
     --gecos "Default user" \
     --uid ${NB_UID} \
     ${NB_USER}
+
+#====================================================================================
+# libpng15 (needed by pyferret)
+
+USER root
+WORKDIR /opt
+RUN wget --no-check-certificate https://sourceforge.net/projects/libpng/files/libpng15/1.5.30/libpng-1.5.30.tar.gz && \
+    tar xvfz libpng-1.5.30.tar.gz
+RUN cd libpng-1.5.30 && \
+    ./configure --prefix=/usr/local/libpng && \
+    make check && \
+    make install
 
 #====================================================================================
 # pyferret installation
