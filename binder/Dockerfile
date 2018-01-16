@@ -27,6 +27,8 @@ RUN cd libpng-1.5.30 && \
     make check && \
     make install
 
+ENV LD_LIBRARY_PATH=/opt/libpng-1.5.30/lib:${LD_LIBRARY_PATH}
+
 #====================================================================================
 # pyferret installation
 
@@ -49,7 +51,7 @@ ENV FER_DIR=/opt/pyferret-7.3-RHEL7-64
 ENV FER_DSETS=/opt/fer_dsets
 
 ENV PYTHONPATH=${FER_DIR}/lib/python2.7/site-packages:${PYTHONPATH}
-ENV LD_LIBRARY_PATH=${FER_DIR}/lib/python2.7/site-packages/pyferret
+ENV LD_LIBRARY_PATH=${FER_DIR}/lib/python2.7/site-packages/pyferret:${LD_LIBRARY_PATH}
 
 ENV FER_DATA=.:${FER_DSETS}/data:${FER_DIR}/contrib:/opt/fast
 ENV FER_DESCR=.:${FER_DSETS}/descr
