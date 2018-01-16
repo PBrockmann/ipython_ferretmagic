@@ -4,7 +4,7 @@ FROM yuxiaorui/python-2.7-slim
 
 #====================================================================================
 RUN pip install --no-cache-dir notebook==5.*
-RUN apt-get -y install wget
+RUN apt-get update && apt-get -y install wget
 
 #====================================================================================
 ENV NB_USER agentk
