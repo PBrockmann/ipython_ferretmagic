@@ -32,7 +32,7 @@ RUN cd libpng-1.5.30 && \
     make check && \
     make install
 
-ENV LD_LIBRARY_PATH=/usr/local/libpng/lib:${LD_LIBRARY_PATH}
+ENV LD_LIBRARY_PATH="/usr/local/libpng/lib:${LD_LIBRARY_PATH}"
 
 #====================================================================================
 # pyferret installation
@@ -52,19 +52,19 @@ WORKDIR /opt
 RUN git clone https://github.com/PBrockmann/fast
 
 #====================================================================================
-ENV FER_DIR=/opt/pyferret-7.3-RHEL7-64
-ENV FER_DSETS=/opt/fer_dsets
+ENV FER_DIR="/opt/pyferret-7.3-RHEL7-64"
+ENV FER_DSETS="/opt/fer_dsets"
 
-ENV PYTHONPATH=${FER_DIR}/lib/python2.7/site-packages:${PYTHONPATH}
-ENV LD_LIBRARY_PATH=${FER_DIR}/lib/python2.7/site-packages/pyferret:${LD_LIBRARY_PATH}
+ENV PYTHONPATH="${FER_DIR}/lib/python2.7/site-packages:${PYTHONPATH}"
+ENV LD_LIBRARY_PATH="${FER_DIR}/lib/python2.7/site-packages/pyferret:${LD_LIBRARY_PATH}"
 
-ENV FER_DATA=.:${FER_DSETS}/data:${FER_DIR}/contrib:/opt/fast
-ENV FER_DESCR=.:${FER_DSETS}/descr
-ENV FER_GRIDS=.:${FER_DSETS}/grids
-ENV FER_GO=.:${FER_DIR}/go:${FER_DIR}/examples:${FER_DIR}/contrib:/opt/fast
-ENV FER_PALETTE=.:/${FER_DIR}/ppl:/opt/fast
-ENV FER_FONTS=${FER_DIR}/ppl/fonts
-ENV PYFER_EXTERNAL_FUNCTIONS=${FER_DIR}/ext_func/pylibs
+ENV FER_DATA=".:${FER_DSETS}/data:${FER_DIR}/contrib:/opt/fast"
+ENV FER_DESCR=".:${FER_DSETS}/descr"
+ENV FER_GRIDS=".:${FER_DSETS}/grids"
+ENV FER_GO=".:${FER_DIR}/go:${FER_DIR}/examples:${FER_DIR}/contrib:/opt/fast"
+ENV FER_PALETTE=".:/${FER_DIR}/ppl:/opt/fast"
+ENV FER_FONTS="${FER_DIR}/ppl/fonts"
+ENV PYFER_EXTERNAL_FUNCTIONS="${FER_DIR}/ext_func/pylibs"
 
 #====================================================================================
 # Make sure the contents of our repo are in ${HOME}
