@@ -1,3 +1,2 @@
-#!/bin/bash
-
 export FER_DIR=/srv/conda/envs/kernel/share/fer_dsets
+export FER_PALETTE=/srv/conda/envs/kernel/ppl
