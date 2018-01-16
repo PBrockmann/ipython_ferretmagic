@@ -14,7 +14,7 @@ RUN pip install numpy pandas bokeh
 RUN pip install ipywidgets
 RUN pip install randomcolor
 RUN pip install ferretmagic==2016.10.28
-RUN pip install rpy2
+RUN pip install rpy2==2.8.5
 
 #====================================================================================
 ENV NB_USER agentk
