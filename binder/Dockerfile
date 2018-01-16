@@ -27,7 +27,7 @@ RUN cd libpng-1.5.30 && \
     make check && \
     make install
 
-ENV LD_LIBRARY_PATH=/opt/libpng-1.5.30/lib:${LD_LIBRARY_PATH}
+ENV LD_LIBRARY_PATH=/usr/local/libpng/lib:${LD_LIBRARY_PATH}
 
 #====================================================================================
 # pyferret installation
