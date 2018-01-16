@@ -9,7 +9,6 @@ RUN pip install --no-cache-dir notebook==5.*
 ENV NB_USER agentk
 ENV NB_UID 1000
 ENV HOME /home/${NB_USER}
-
 RUN adduser --disabled-password \
     --gecos "Default user" \
     --uid ${NB_UID} \
@@ -26,16 +25,14 @@ USER ${NB_USER}
 # pyferret installation
 
 WORKDIR /opt
-
-RUN wget https://github.com/NOAA-PMEL/PyFerret/releases/download/v7.3/pyferret-7.3-RHEL7-64.tar.gz && \
-    tar xvfz pyferret-7.3-RHEL7-64.tar.gz
-RUN wget ftp://ftp.pmel.noaa.gov/ferret/pub/data/fer_dsets.tar.gz && \
-    tar xvfz fer_dsets.tar.gz
+ADD https://github.com/NOAA-PMEL/PyFerret/releases/download/v7.3/pyferret-7.3-RHEL7-64.tar.gz
+RUN tar xvfz pyferret-7.3-RHEL7-64.tar.gz
+ADD ftp://ftp.pmel.noaa.gov/ferret/pub/data/fer_dsets.tar.gz
+RUN tar xvfz fer_dsets.tar.gz
 
 
 #====================================================================================
 # fast installation
 
 WORKDIR /opt
-
 RUN git clone https://github.com/PBrockmann/fast
