@@ -16,7 +16,7 @@ RUN pip install ferretmagic==2016.10.28
 RUN pip install rpy2==2.8.5
 
 RUN pip install ipywidgets
-RUN jupyter nbextension enable --py widgetsnbextension
+RUN jupyter nbextension enable --py widgetsnbextension --sys-prefix
 
 #====================================================================================
 ENV NB_USER agentk
