@@ -16,11 +16,15 @@ Browse a basic ferret tutorial using ferretmagic from: https://github.com/PBrock
 
 ## Latest news 
 
-07/03/2017
- * Tested with pyferret 7.1, jupyter 4.2.0, ipywidgets 6.0.0
+2018/01/18
+ * pyferret 7.3 and ferretmagic extension can now be fully tested from binder (http://mybinder.readthedocs.io/en/latest) !
+ * Tested with pyferret==7.3, jupyter==4.4.0, ipython==5.5.0, ipywidgets==7.0.5
 
-28/10/2016 
- * Tested with pyferret 7.0, jupyter 4.2.0 and ipython 5.1.0
+2017/03/17
+ * Tested with pyferret==7.1, jupyter==4.2.0, ipywidgets==6.0.0
+
+2016/10/28
+ * Tested with pyferret==7.0, jupyter==4.2.0 and ipython==5.1.0
  * Installation from pip
 
 ## Installation
