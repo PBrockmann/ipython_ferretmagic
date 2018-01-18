@@ -4,6 +4,11 @@ FROM python:2.7.14-stretch
 #====================================================================================
 LABEL maintainer="Patrick.Brockmann@lsce.ipsl.fr"
 
+LABEL description="This image aims to provide a clean docker base to run pyferret and ferretmagic jupyter ipython extension."
+
+LABEL ref1="http://ferret.pmel.noaa.gov/Ferret/"
+LABEL ref2="https://github.com/NOAA-PMEL/PyFerret"
+
 #====================================================================================
 RUN apt-get update && apt-get -y install wget git
 RUN apt-get update && apt-get -y install libgfortran3
@@ -72,6 +77,8 @@ ENV FER_GO=". ${FER_DIR}/go ${FER_DIR}/examples ${FER_DIR}/contrib /opt/fast"
 ENV FER_PALETTE=". /${FER_DIR}/ppl /opt/fast"
 ENV FER_FONTS="${FER_DIR}/ppl/fonts"
 ENV PYFER_EXTERNAL_FUNCTIONS="${FER_DIR}/ext_func/pylibs"
+
+ENV PATH="${FER_DIR}/bin:/opt/fast:${PATH}"
 
 #====================================================================================
 # Make sure the contents of our repo are in ${HOME}
