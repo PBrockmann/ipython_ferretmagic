@@ -17,6 +17,7 @@ Browse a basic ferret tutorial using ferretmagic from: https://github.com/PBrock
 ## Latest news 
 
 2018/01/18
+ * a Docker image is available from https://hub.docker.com/r/pbrockmann/pyferret-7.3/
  * pyferret 7.3 and ferretmagic extension can now be fully tested from binder (http://mybinder.readthedocs.io/en/latest) !
  * Tested with pyferret==7.3, jupyter==4.4.0, ipython==5.5.0, ipywidgets==7.0.5
 
