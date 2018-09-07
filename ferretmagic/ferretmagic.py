@@ -239,7 +239,7 @@ class ferretMagics(Magics):
                rmtree(temp_dir)
 
 	# Error in ferret code - Delete temporary directory 
-	else: 
+	else:
            rmtree(temp_dir)
 
         # Publication
