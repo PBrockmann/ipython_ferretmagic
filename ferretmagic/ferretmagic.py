@@ -48,6 +48,8 @@ Usage
 #  https://cdcvs.fnal.gov/redmine/projects/ipython_ext/repository/revisions/master/raw/ipythonPexpect.py
 #-----------------------------------------------------------------------------
 
+from __future__ import print_function
+
 import os.path
 import tempfile
 import math
@@ -239,7 +241,7 @@ class ferretMagics(Magics):
                rmtree(temp_dir)
 
 	# Error in ferret code - Delete temporary directory 
-	else:
+        else:
            rmtree(temp_dir)
 
         # Publication
@@ -355,7 +357,7 @@ class ferretMagics(Magics):
                ....: use levitus_climatology
             In [19]: %ferret_getdata tempdict = temp
            ....: Message: tempdict is now available in python as a dictionary containing the variable's metadata and data array.
-            In [20]: print tempdict.keys()
+            In [20]: print(tempdict.keys())
            ....: ['axis_coords', 'axis_types', 'data_unit', 'axis_units', 'title', 'axis_names', 'missing_value', 'data']
 
         '''
@@ -425,8 +427,8 @@ class ferretMagics(Magics):
     
         self._shell.ferret_locked = True
 
-        print 'WARNING: All future cell execution will be processed through pyferret!'
-        print 'To return to IPython, issue %ferret_unlock'
+        print('WARNING: All future cell execution will be processed through pyferret!')
+        print('To return to IPython, issue %ferret_unlock')
 
     @line_magic
     def ferret_unlock(self, line):
@@ -437,7 +439,7 @@ class ferretMagics(Magics):
     
         self._shell.ferret_locked = False
     
-        print 'Notebook will use IPython'
+        print('Notebook will use IPython')
 
 # Let's rewrite InteractiveShell.run_cell to do automatic processing with pyferret,
 # if desired
