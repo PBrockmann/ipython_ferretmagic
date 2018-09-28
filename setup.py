@@ -1,10 +1,13 @@
-from distutils.core import setup
+import setuptools
 
-setup(
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
+setuptools.setup(
   name = 'ferretmagic',
   packages = ['ferretmagic'],
   py_modules = ['ferretmagic'],
-  version = '2016.10.28',
+  version = '2018.09.28',
   description = 'ipython extension for pyferret',
   author = 'Patrick Brockmann',
   author_email = 'Patrick.Brockmann@lsce.ipsl.fr',

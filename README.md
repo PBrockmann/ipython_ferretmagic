@@ -16,6 +16,11 @@ Browse a basic ferret tutorial using ferretmagic from: https://github.com/PBrock
 
 ## Latest news 
 
+2018/09/28
+ * Compatibility with python 3 with print command
+ * Tested with pyferret==7.43, notebook==5.7.0, jupyter==1.0.0, ipython==5.8.0, ipywidgets==7.4.2
+ * Update pip package (now last version is 2018.09.28 https://pypi.org/project/ferretmagic/)
+
 2018/01/18
  * a Docker image is available from https://hub.docker.com/r/pbrockmann/pyferret-7.3/
  * pyferret 7.3 and ferretmagic extension can now be fully tested from binder (http://mybinder.readthedocs.io/en/latest) !
