@@ -54,6 +54,7 @@ import os.path
 import tempfile
 import math
 import pyferret
+import base64
 from shutil import rmtree
 
 from IPython.core.getipython import get_ipython
@@ -231,7 +232,8 @@ class ferretMagics(Magics):
                # Display the image in the notebook
                try:
                    f = open(plot_filename, 'rb')
-                   image = f.read().encode('base64')
+                   #image = f.read().encode('base64')
+                   image = base64.b64encode(f.read()).decode('utf8')
                    f.close()
                    display_data.append((_PUBLISH_KEY, {'text/html': '<div class="myoutput">' + 
                        '<img src="data:image/png;base64,%s"/></div>' % image}))

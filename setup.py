@@ -7,12 +7,20 @@ setuptools.setup(
   name = 'ferretmagic',
   packages = ['ferretmagic'],
   py_modules = ['ferretmagic'],
-  version = '2018.09.28',
+  version = '2018.10.01',
   description = 'ipython extension for pyferret',
   author = 'Patrick Brockmann',
   author_email = 'Patrick.Brockmann@lsce.ipsl.fr',
+  long_description=long_description,
+  long_description_content_type="text/markdown",
   url = 'https://github.com/PBrockmann/ipython_ferretmagic',
   download_url = 'https://github.com/PBrockmann/ipython_ferretmagic/tarball/master',
   keywords = ['jupyter', 'ipython', 'ferret', 'pyferret', 'magic', 'extension'],
-  classifiers = []
+  classifiers = [
+	'Programming Language :: Python',
+	'License :: OSI Approved :: MIT License',
+	'Operating System :: OS Independent',
+	'Framework :: Jupyter',
+	'Framework :: IPython'
+  ],
 )
