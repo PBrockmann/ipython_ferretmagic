@@ -19,7 +19,7 @@ Browse a basic ferret tutorial using ferretmagic from: https://github.com/PBrock
 2018/10/01
  * Compatibility with python 3 with print command and base64 encoding
  * Tested with pyferret==7.43, notebook==5.7.0, jupyter==1.0.0, ipython==5.8.0, ipywidgets==7.4.2
- * Update pip package (now last version is 2018.10.1 https://pypi.org/project/ferretmagic/)
+ * Update pip package (now last version is 20181001 https://pypi.org/project/ferretmagic/)
 
 2018/01/18
  * a Docker image is available from https://hub.docker.com/r/pbrockmann/pyferret-7.3/

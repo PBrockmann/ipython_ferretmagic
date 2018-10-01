@@ -7,7 +7,7 @@ setuptools.setup(
   name = 'ferretmagic',
   packages = ['ferretmagic'],
   py_modules = ['ferretmagic'],
-  version = '2018.10.01',
+  version = '20181001',
   description = 'ipython extension for pyferret',
   author = 'Patrick Brockmann',
   author_email = 'Patrick.Brockmann@lsce.ipsl.fr',
