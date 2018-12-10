@@ -16,6 +16,10 @@ Browse a basic ferret tutorial using ferretmagic from: https://github.com/PBrock
 
 ## Latest news 
 
+2018/12/10
+ * Tested with pyferret==7.44
+
+
 2018/10/01
  * Compatibility with python 3 with print command and base64 encoding
  * Tested with pyferret==7.43, notebook==5.7.0, jupyter==1.0.0, ipython==5.8.0, ipywidgets==7.4.2
