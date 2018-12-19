@@ -17,7 +17,8 @@ setuptools.setup(
   download_url = 'https://github.com/PBrockmann/ipython_ferretmagic/tarball/master',
   keywords = ['jupyter', 'ipython', 'ferret', 'pyferret', 'magic', 'extension'],
   classifiers = [
-	'Programming Language :: Python',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 2',
 	'License :: OSI Approved :: MIT License',
 	'Operating System :: OS Independent',
 	'Framework :: Jupyter',
