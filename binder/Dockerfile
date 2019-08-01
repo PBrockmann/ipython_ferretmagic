@@ -17,7 +17,7 @@ RUN apt-get update && apt-get -y install r-base
 RUN pip install --no-cache-dir notebook==5.*
 RUN pip install numpy pandas bokeh
 RUN pip install randomcolor
-RUN pip install ferretmagic==2016.10.28
+RUN pip install ferretmagic==20181001
 RUN pip install rpy2==2.8.5
 
 RUN pip install ipywidgets
