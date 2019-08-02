@@ -10,12 +10,14 @@ LABEL ref1="http://ferret.pmel.noaa.gov/Ferret/"
 LABEL ref2="https://github.com/NOAA-PMEL/PyFerret"
 
 #====================================================================================
-RUN apt-get update && apt-get -y install wget git
-RUN apt-get update && apt-get -y install r-base
+#RUN apt-get update && apt-get -y install wget git
+#RUN apt-get update && apt-get -y install r-base
+
+ENV PATH /opt/anaconda3/bin:$PATH
 
 RUN conda install -c conda-forge pyferret
 
-RUN pip install notebook
+RUN pip install --no-cache-dir notebook==6.*
 RUN pip install numpy pandas bokeh
 RUN pip install randomcolor
 RUN pip install ferretmagic==20181001
@@ -38,8 +40,7 @@ RUN adduser --disabled-password \
 
 USER root
 WORKDIR /opt
-RUN git clone https://github.com/NOAA-PMEL/FerretDatasets && \
-    mv FerretDatasets fer_dsets
+RUN git clone https://github.com/NOAA-PMEL/FerretDatasets fer_dsets
 
 #====================================================================================
 # fast installation
