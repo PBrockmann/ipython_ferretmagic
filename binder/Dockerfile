@@ -2,6 +2,11 @@
 FROM continuumio/anaconda3
 
 #====================================================================================
+RUN conda create -n env python=3.6
+RUN echo "source activate env" > ~/.bashrc
+ENV PATH /opt/conda/envs/env/bin:$PATH
+
+#====================================================================================
 LABEL maintainer="Patrick.Brockmann@lsce.ipsl.fr"
 
 LABEL description="This image aims to provide a clean docker base to run pyferret and ferretmagic jupyter ipython extension."
@@ -23,8 +28,6 @@ RUN adduser --disabled-password \
 
 #====================================================================================
 USER root
-
-ENV PATH /opt/conda/bin:$PATH
 
 RUN conda install -c conda-forge pyferret
 
