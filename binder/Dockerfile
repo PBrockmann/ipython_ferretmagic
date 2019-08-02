@@ -1,5 +1,5 @@
 #====================================================================================
-FROM python:2.7.14-stretch
+FROM python:2.7.16-buster
 
 #====================================================================================
 LABEL maintainer="Patrick.Brockmann@lsce.ipsl.fr"
@@ -14,11 +14,11 @@ RUN apt-get update && apt-get -y install wget git
 RUN apt-get update && apt-get -y install libgfortran3
 RUN apt-get update && apt-get -y install r-base
 
-RUN pip install --no-cache-dir notebook==5.*
+RUN pip install --no-cache-dir notebook==6.0.0
 RUN pip install numpy pandas bokeh
 RUN pip install randomcolor
 RUN pip install ferretmagic==20181001
-RUN pip install rpy2==2.8.5
+RUN pip install rpy2==3.0.5
 
 RUN pip install ipywidgets
 RUN jupyter nbextension enable --py widgetsnbextension --sys-prefix
@@ -35,24 +35,24 @@ RUN adduser --disabled-password \
 #====================================================================================
 # libpng15 (needed by pyferret)
 
-USER root
-WORKDIR /opt
-RUN wget --no-check-certificate https://sourceforge.net/projects/libpng/files/libpng15/1.5.30/libpng-1.5.30.tar.gz && \
-    tar xvfz libpng-1.5.30.tar.gz
-RUN cd libpng-1.5.30 && \
-    ./configure --prefix=/usr/local/libpng && \
-    make check && \
-    make install
-
-ENV LD_LIBRARY_PATH="/usr/local/libpng/lib:${LD_LIBRARY_PATH}"
+#USER root
+#WORKDIR /opt
+#RUN wget --no-check-certificate https://sourceforge.net/projects/libpng/files/libpng15/1.5.30/libpng-1.5.30.tar.gz && \
+#    tar xvfz libpng-1.5.30.tar.gz
+#RUN cd libpng-1.5.30 && \
+#    ./configure --prefix=/usr/local/libpng && \
+#    make check && \
+#    make install
+#
+#ENV LD_LIBRARY_PATH="/usr/local/libpng/lib:${LD_LIBRARY_PATH}"
 
 #====================================================================================
 # pyferret installation
 
 USER root
 WORKDIR /opt
-RUN wget https://github.com/NOAA-PMEL/PyFerret/releases/download/v7.3/pyferret-7.3-RHEL7-64.tar.gz && \
-    tar xvfz pyferret-7.3-RHEL7-64.tar.gz
+RUN wget https://github.com/NOAA-PMEL/PyFerret/releases/download/v7.5.0/PyFerret-7.5.0-RHEL7-64-Python2.7.tar.gz && \
+    tar xvfz PyFerret-7.5.0-RHEL7-64-Python2.7.tar.gz
 RUN git clone https://github.com/NOAA-PMEL/FerretDatasets && \
     mv FerretDatasets fer_dsets
 
@@ -64,7 +64,7 @@ WORKDIR /opt
 RUN git clone https://github.com/PBrockmann/fast
 
 #====================================================================================
-ENV FER_DIR="/opt/pyferret-7.3-RHEL7-64"
+ENV FER_DIR="/opt/PyFerret-7.5.0-RHEL7-64-Python2.7"
 ENV FER_DSETS="/opt/fer_dsets"
 
 ENV PYTHONPATH="${FER_DIR}/lib/python2.7/site-packages:${PYTHONPATH}"
