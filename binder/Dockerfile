@@ -13,7 +13,7 @@ LABEL ref2="https://github.com/NOAA-PMEL/PyFerret"
 #RUN apt-get update && apt-get -y install wget git
 #RUN apt-get update && apt-get -y install r-base
 
-ENV PATH /opt/anaconda3/bin:$PATH
+ENV PATH /opt/conda/bin:$PATH
 
 RUN conda install -c conda-forge pyferret
 
