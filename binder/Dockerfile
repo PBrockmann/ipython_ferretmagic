@@ -21,6 +21,8 @@ RUN adduser --disabled-password \
 #====================================================================================
 USER root
 
+ENV PATH /opt/conda/bin:$PATH
+
 RUN conda install -c conda-forge pyferret
 
 RUN pip install --no-cache-dir notebook==6.*
