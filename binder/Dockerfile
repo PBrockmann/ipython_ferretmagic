@@ -1,5 +1,5 @@
 #====================================================================================
-FROM continuumio/anaconda3
+FROM continuumio/miniconda3
 
 #====================================================================================
 RUN conda create -n env python=3.6
@@ -13,9 +13,6 @@ LABEL description="This image aims to provide a clean docker base to run pyferre
 
 LABEL ref1="http://ferret.pmel.noaa.gov/Ferret/"
 LABEL ref2="https://github.com/NOAA-PMEL/PyFerret"
-
-#====================================================================================
-RUN apt-get -y update
 
 #====================================================================================
 ENV NB_USER agentk
