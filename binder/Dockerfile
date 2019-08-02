@@ -18,7 +18,7 @@ RUN pip install notebook
 RUN pip install numpy pandas bokeh
 RUN pip install randomcolor
 RUN pip install ferretmagic==20181001
-RUN pip install rpy2==3.0.5
+RUN pip install rpy2
 
 RUN pip install ipywidgets
 RUN jupyter nbextension enable --py widgetsnbextension --sys-prefix
