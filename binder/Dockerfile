@@ -14,7 +14,7 @@ RUN apt-get update && apt-get -y install wget git
 #RUN apt-get update && apt-get -y install libgfortran3
 RUN apt-get update && apt-get -y install r-base
 
-RUN pip install --no-cache-dir notebook==6.0.0
+RUN pip install notebook
 RUN pip install numpy pandas bokeh
 RUN pip install randomcolor
 RUN pip install ferretmagic==20181001
