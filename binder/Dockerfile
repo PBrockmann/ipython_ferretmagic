@@ -10,12 +10,18 @@ LABEL ref1="http://ferret.pmel.noaa.gov/Ferret/"
 LABEL ref2="https://github.com/NOAA-PMEL/PyFerret"
 
 #====================================================================================
-#RUN apt-get update && apt-get -y install wget git
-#RUN apt-get update && apt-get -y install r-base
+ENV NB_USER agentk
+ENV NB_UID 1000
+ENV HOME /home/${NB_USER}
+RUN adduser --disabled-password \
+    --gecos "Default user" \
+    --uid ${NB_UID} \
+    ${NB_USER}
 
-ENV PATH /opt/conda/bin:$PATH
+#====================================================================================
+USER root
 
-#RUN conda install -c conda-forge pyferret
+RUN conda install -c conda-forge pyferret
 
 RUN pip install --no-cache-dir notebook==6.*
 RUN pip install numpy pandas bokeh
@@ -25,15 +31,6 @@ RUN pip install rpy2
 
 RUN pip install ipywidgets
 RUN jupyter nbextension enable --py widgetsnbextension --sys-prefix
-
-#====================================================================================
-ENV NB_USER agentk
-ENV NB_UID 1000
-ENV HOME /home/${NB_USER}
-RUN adduser --disabled-password \
-    --gecos "Default user" \
-    --uid ${NB_UID} \
-    ${NB_USER}
 
 #====================================================================================
 # Ferret Datasets installation
