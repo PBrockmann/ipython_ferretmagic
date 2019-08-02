@@ -1,5 +1,5 @@
 #====================================================================================
-FROM python:2.7.16-buster
+FROM python:3.6
 
 #====================================================================================
 LABEL maintainer="Patrick.Brockmann@lsce.ipsl.fr"
@@ -11,8 +11,9 @@ LABEL ref2="https://github.com/NOAA-PMEL/PyFerret"
 
 #====================================================================================
 RUN apt-get update && apt-get -y install wget git
-#RUN apt-get update && apt-get -y install libgfortran3
 RUN apt-get update && apt-get -y install r-base
+
+RUN conda install -c conda-forge pyferret
 
 RUN pip install notebook
 RUN pip install numpy pandas bokeh
@@ -33,26 +34,10 @@ RUN adduser --disabled-password \
     ${NB_USER}
 
 #====================================================================================
-# libpng15 (needed by pyferret)
-
-#USER root
-#WORKDIR /opt
-#RUN wget --no-check-certificate https://sourceforge.net/projects/libpng/files/libpng15/1.5.30/libpng-1.5.30.tar.gz && \
-#    tar xvfz libpng-1.5.30.tar.gz
-#RUN cd libpng-1.5.30 && \
-#    ./configure --prefix=/usr/local/libpng && \
-#    make check && \
-#    make install
-#
-#ENV LD_LIBRARY_PATH="/usr/local/libpng/lib:${LD_LIBRARY_PATH}"
-
-#====================================================================================
 # pyferret installation
 
 USER root
 WORKDIR /opt
-RUN wget https://github.com/NOAA-PMEL/PyFerret/releases/download/v7.5.0/PyFerret-7.5.0-RHEL7-64-Python2.7.tar.gz && \
-    tar xvfz PyFerret-7.5.0-RHEL7-64-Python2.7.tar.gz
 RUN git clone https://github.com/NOAA-PMEL/FerretDatasets && \
     mv FerretDatasets fer_dsets
 
@@ -64,11 +49,11 @@ WORKDIR /opt
 RUN git clone https://github.com/PBrockmann/fast
 
 #====================================================================================
-ENV FER_DIR="/opt/PyFerret-7.5.0-RHEL7-64-Python2.7"
+ENV FER_DIR="/opt/"
 ENV FER_DSETS="/opt/fer_dsets"
 
-ENV PYTHONPATH="${FER_DIR}/lib/python2.7/site-packages:${PYTHONPATH}"
-ENV LD_LIBRARY_PATH="${FER_DIR}/lib/python2.7/site-packages/pyferret:${LD_LIBRARY_PATH}"
+ENV PYTHONPATH="${FER_DIR}/lib/python3.6/site-packages:${PYTHONPATH}"
+ENV LD_LIBRARY_PATH="${FER_DIR}/lib/python3.6/site-packages/pyferret:${LD_LIBRARY_PATH}"
 
 ENV FER_DATA=". ${FER_DSETS}/data ${FER_DIR}/contrib /opt/fast"
 ENV FER_DESCR=". ${FER_DSETS}/descr"
