@@ -15,7 +15,7 @@ LABEL ref2="https://github.com/NOAA-PMEL/PyFerret"
 
 ENV PATH /opt/conda/bin:$PATH
 
-RUN conda install -c conda-forge pyferret
+#RUN conda install -c conda-forge pyferret
 
 RUN pip install --no-cache-dir notebook==6.*
 RUN pip install numpy pandas bokeh
@@ -36,7 +36,7 @@ RUN adduser --disabled-password \
     ${NB_USER}
 
 #====================================================================================
-# pyferret installation
+# Ferret Datasets installation
 
 USER root
 WORKDIR /opt
