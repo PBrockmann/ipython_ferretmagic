@@ -26,6 +26,8 @@ RUN adduser --disabled-password \
 #====================================================================================
 USER root
 
+RUN conda update
+
 RUN conda install -c conda-forge pyferret
 
 RUN pip install --no-cache-dir notebook==6.*
@@ -52,11 +54,8 @@ WORKDIR /opt
 RUN git clone https://github.com/PBrockmann/fast
 
 #====================================================================================
-ENV FER_DIR="/opt/"
+ENV FER_DIR="/opt/conda/pkgs/pyferret-7.5.0-py37hb511868_2/"
 ENV FER_DSETS="/opt/fer_dsets"
-
-ENV PYTHONPATH="${FER_DIR}/lib/python3.6/site-packages:${PYTHONPATH}"
-ENV LD_LIBRARY_PATH="${FER_DIR}/lib/python3.6/site-packages/pyferret:${LD_LIBRARY_PATH}"
 
 ENV FER_DATA=". ${FER_DSETS}/data ${FER_DIR}/contrib /opt/fast"
 ENV FER_DESCR=". ${FER_DSETS}/descr"
