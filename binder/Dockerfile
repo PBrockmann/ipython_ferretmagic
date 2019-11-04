@@ -26,6 +26,7 @@ RUN adduser --disabled-password \
 #====================================================================================
 USER root
 
+RUN conda init bash
 RUN conda create -n FERRET -c conda-forge pyferret ferret_datasets --yes
 RUN conda activate FERRET
 
