@@ -26,17 +26,14 @@ RUN adduser --disabled-password \
 #====================================================================================
 USER root
 
-RUN conda init bash
 RUN conda create -n FERRET -c conda-forge pyferret ferret_datasets --yes
-RUN conda activate FERRET
+RUN echo "source activate FERRET" > ~/.bashrc
 
 RUN conda install -c r rpy2
-
 RUN pip install --no-cache-dir notebook==6.*
 RUN pip install numpy pandas bokeh
 RUN pip install randomcolor
 RUN pip install ferretmagic
-
 RUN pip install ipywidgets
 RUN jupyter nbextension enable --py widgetsnbextension --sys-prefix
 
