@@ -26,7 +26,7 @@ RUN adduser --disabled-password \
 #====================================================================================
 USER root
 
-RUN conda install -c conda-forge pyferret
+RUN conda create -n FERRET -c conda-forge pyferret ferret_datasets --yes
 RUN conda install -c r rpy2
 
 RUN pip install --no-cache-dir notebook==6.*
@@ -38,13 +38,6 @@ RUN pip install ipywidgets
 RUN jupyter nbextension enable --py widgetsnbextension --sys-prefix
 
 #====================================================================================
-# Ferret Datasets installation
-
-USER root
-WORKDIR /opt
-RUN git clone https://github.com/NOAA-PMEL/FerretDatasets fer_dsets
-
-#====================================================================================
 # fast installation
 
 USER root
@@ -52,16 +45,12 @@ WORKDIR /opt
 RUN git clone https://github.com/PBrockmann/fast
 
 #====================================================================================
-ENV FER_DIR="/opt/conda/pkgs/pyferret-7.5.0-py37hb511868_2/"
-ENV FER_DSETS="/opt/fer_dsets"
+RUN conda activate FERRET
 
-ENV FER_DATA=". ${FER_DSETS}/data ${FER_DIR}/contrib /opt/fast"
-ENV FER_DESCR=". ${FER_DSETS}/descr"
-ENV FER_GRIDS=". ${FER_DSETS}/grids"
-ENV FER_GO=". ${FER_DIR}/go ${FER_DIR}/examples ${FER_DIR}/contrib /opt/fast"
-ENV FER_PALETTE=". /${FER_DIR}/ppl /opt/fast"
-ENV FER_FONTS="${FER_DIR}/ppl/fonts"
-ENV PYFER_EXTERNAL_FUNCTIONS="${FER_DIR}/ext_func/pylibs"
+#====================================================================================
+ENV FER_DATA=". ${FER_DATA} /opt/fast"
+ENV FER_GO=". ${FER_GO} /opt/fast"
+ENV FER_PALETTE=". /${FER_PALETTE} /opt/fast"
 
 ENV PATH="${FER_DIR}/bin:/opt/fast:${PATH}"
 
