@@ -2,7 +2,7 @@
 FROM continuumio/miniconda3
 
 #====================================================================================
-RUN conda create -n env python=3.6
+RUN conda create -n env python=3.7
 RUN echo "source activate env" > ~/.bashrc
 ENV PATH /opt/conda/envs/env/bin:$PATH
 
@@ -27,12 +27,12 @@ RUN adduser --disabled-password \
 USER root
 
 RUN conda install -c conda-forge pyferret
+RUN conda install -c r rpy2
 
 RUN pip install --no-cache-dir notebook==6.*
 RUN pip install numpy pandas bokeh
 RUN pip install randomcolor
 RUN pip install ferretmagic
-#RUN pip install rpy2
 
 RUN pip install ipywidgets
 RUN jupyter nbextension enable --py widgetsnbextension --sys-prefix
