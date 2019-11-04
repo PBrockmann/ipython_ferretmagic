@@ -26,14 +26,12 @@ RUN adduser --disabled-password \
 #====================================================================================
 USER root
 
-RUN conda update
-
 RUN conda install -c conda-forge pyferret
 
 RUN pip install --no-cache-dir notebook==6.*
 RUN pip install numpy pandas bokeh
 RUN pip install randomcolor
-RUN pip install ferretmagic==20181001
+RUN pip install ferretmagic
 RUN pip install rpy2
 
 RUN pip install ipywidgets
