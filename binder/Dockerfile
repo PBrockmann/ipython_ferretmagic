@@ -27,7 +27,8 @@ RUN adduser --disabled-password \
 USER root
 
 RUN conda create -n FERRET -c conda-forge pyferret ferret_datasets --yes
-RUN echo "source activate FERRET" > ~/.bashrc
+#RUN echo "source activate FERRET" > ~/.bashrc
+RUN /bin/bash -c "source activate FERRET"
 
 RUN conda install -c r rpy2
 RUN pip install --no-cache-dir notebook==6.*
