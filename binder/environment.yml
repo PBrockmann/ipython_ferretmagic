@@ -4,15 +4,15 @@ channels:
   - r
 dependencies:
   - python=3.7
-  - jupyter
-  - notebook
-  - numpy
-  - pandas
-  - bokeh
-  - pyferret
-  - ferret_datasets
-  - rpy2
-  - pip
+  - jupyter=1.0.0
+  - notebook=6.0.1
+  - numpy=1.17.3
+  - pandas=0.25.3
+  - bokeh=1.4.0
+  - pyferret=7.5.0
+  - ferret_datasets=7.4
+  - rpy2=3.1.0
+  - pip=19.3.1
   - pip:
     - ipywidgets
     - randomcolor
