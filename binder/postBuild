@@ -4,7 +4,8 @@ set -ex
 
 jupyter nbextension enable --py widgetsnbextension --sys-prefix
 
-git clone https://github.com/PBrockmann/fast
+mkdir /opt
+git clone https://github.com/PBrockmann/fast /opt
 
 export FER_DATA=". ${FER_DATA} /opt/fast"
 export FER_GO=". ${FER_GO} /opt/fast"
