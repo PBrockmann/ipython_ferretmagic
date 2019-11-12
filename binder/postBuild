@@ -2,11 +2,17 @@
 
 set -ex
 
+#==================================================
 jupyter nbextension enable --py widgetsnbextension --sys-prefix
 
+#==================================================
 git clone https://github.com/PBrockmann/fast
 
-echo 'export FER_DATA=". $FER_DATA /home/jovyan/fast"' >> .bashrc
-echo 'export FER_GO=". $FER_GO /home/jovyan/fast"' >> .bashrc
-echo 'export FER_PALETTE=". /$FER_PALETTE /home/jovyan/fast"' >> .bashrc 
-echo 'export PATH="$FER_DIR/bin:/home/jovyan/fast:$PATH"' >> .bashrc
+pyferretActivate=/srv/conda/envs/notebook/etc/conda/activate.d/pyferret-activate.sh
+
+echo '' >> $pyferretActivate
+echo '=========================================' >> $pyferretActivate
+echo 'export FER_DATA=". $FER_DATA $HOME/fast"' >> $pyferretActivate
+echo 'export FER_GO=". $FER_GO $HOME/fast"' >> $pyferretActivate
+echo 'export FER_PALETTE=". /$FER_PALETTE $HOME/fast"' >> $pyferretActivate
+echo 'export PATH="$FER_DIR/bin:$HOME/fast:$PATH"' >> $pyferretActivate
