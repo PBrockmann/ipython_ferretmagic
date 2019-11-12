@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -ex
+
+jupyter nbextension enable --py widgetsnbextension --sys-prefix
+
+git clone https://github.com/PBrockmann/fast
+
+export FER_DATA=". ${FER_DATA} /opt/fast"
+export FER_GO=". ${FER_GO} /opt/fast"
+export FER_PALETTE=". /${FER_PALETTE} /opt/fast"
+export PATH="${FER_DIR}/bin:/opt/fast:${PATH}"
