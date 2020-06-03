@@ -16,6 +16,9 @@ Browse a basic ferret tutorial using ferretmagic from: https://github.com/PBrock
 
 ## Latest news 
 
+2020/06/03
+ * Update pip package to offer /outline control (now last version is 20200603 https://pypi.org/project/ferretmagic/)
+
 2019/11/13
  * Tested with python 3.7, pyferret 7.5.0
  * Notebooks run with mybinder.org with 2 files (environment.yml and postBuild)
