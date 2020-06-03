@@ -7,7 +7,7 @@ setuptools.setup(
   name = 'ferretmagic',
   packages = ['ferretmagic'],
   py_modules = ['ferretmagic'],
-  version = '20181001',
+  version = '20200603',
   description = 'ipython extension for pyferret',
   author = 'Patrick Brockmann',
   author_email = 'Patrick.Brockmann@lsce.ipsl.fr',
@@ -18,7 +18,6 @@ setuptools.setup(
   keywords = ['jupyter', 'ipython', 'ferret', 'pyferret', 'magic', 'extension'],
   classifiers = [
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 2',
 	'License :: OSI Approved :: MIT License',
 	'Operating System :: OS Independent',
 	'Framework :: Jupyter',
