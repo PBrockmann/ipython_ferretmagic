@@ -66,6 +66,7 @@ from pexpect import ExceptionPexpect
 
 _PUBLISH_KEY = 'ferretMagic.ferret'
 _DEFAULT_PLOTSIZE = '756.0,612.0'
+_DEFAULT_OUTLINE = 0.0
 _DEFAULT_MEMSIZE = 400.0
 
 #----------------------------------------------------
@@ -144,6 +145,12 @@ class ferretMagics(Magics):
         plot_height = float(plot_size[1])
         plot_aspect = plot_height / plot_width
 
+        # Get window outline arg 
+        if args.outline:
+            window_outline = float(args.outline)
+        else:
+            window_outline = _DEFAULT_OUTLINE
+
         # Set window size with the required aspect ratio; 
         # always anti-alias with windows of these sizes
         canvas_width = math.sqrt(plot_width * plot_height / plot_aspect)
@@ -152,8 +159,8 @@ class ferretMagics(Magics):
             # be saved at the original requested size.  
             # Reducing the raster image when saving it sharpens the image.
             canvas_width *= 2.0
-        (errval, errmsg) = pyferret.run('set window /xpixel=%f /aspect=%f 1' % \
-                                        (canvas_width, plot_aspect))
+        (errval, errmsg) = pyferret.run('set window /xpixel=%f /aspect=%f /outline=%f 1' % \
+                                        (canvas_width, plot_aspect, window_outline))
 
         # Run code
         pyferret_error = False
@@ -279,6 +286,10 @@ class ferretMagics(Magics):
         '-f', '--plotname',
         help='Name of the image file to create.  If not given, a name will be generated.'
         )
+    @argument(
+        '--outline', type=float,
+        help='Thickness of a outline to be drawn around each polygon. Default is ' + str( _DEFAULT_OUTLINE)
+        )
     @cell_magic
     def ferret(self, line, cell):
         '''
@@ -320,6 +331,10 @@ class ferretMagics(Magics):
     @argument(
         '-f', '--plotname',
         help='Name of the image file to create.  If not given, a name will be generated.'
+        )
+    @argument(
+        '--outline', type=float,
+        help='Thickness of a outline to be drawn around each polygon. Default is ' + str( _DEFAULT_OUTLINE)
         )
     @argument(
         'string',
