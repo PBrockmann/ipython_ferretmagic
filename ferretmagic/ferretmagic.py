@@ -467,7 +467,7 @@ if not getattr(InteractiveShell, "run_cell_a", False):
   InteractiveShell.run_cell_a = InteractiveShell.run_cell
 
 # Now rewrite run_cell
-def run_cell_new(self, raw_cell, store_history=False, silent=False, shell_futures=True):
+def run_cell_new(self, raw_cell, store_history=False, silent=False, shell_futures=True, **kwargs):
   
   # Are we locked in pyferret?
   if getattr(self, "ferret_locked", False):
@@ -479,7 +479,7 @@ def run_cell_new(self, raw_cell, store_history=False, silent=False, shell_future
       # We're going to add a %%ferret to the top
       raw_cell = "%%ferret\n" + raw_cell
 
-  return self.run_cell_a(raw_cell, store_history, silent, shell_futures)
+  return self.run_cell_a(raw_cell, store_history, silent, shell_futures, **kwargs)
 
 # And assign it
 InteractiveShell.run_cell = run_cell_new
