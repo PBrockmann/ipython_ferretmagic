@@ -16,6 +16,9 @@ Browse a basic ferret tutorial using ferretmagic from: https://github.com/PBrock
 
 ## Latest news 
 
+2022/08/25
+ * Fix to run with ipykernel 6.15.1
+
 2020/06/03
  * Update pip package to offer /outline control (now last version is 20200603 https://pypi.org/project/ferretmagic/)
 
